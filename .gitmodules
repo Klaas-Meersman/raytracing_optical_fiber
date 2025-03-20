@@ -1,0 +1,3 @@
+[submodule "qbRayTrace"]
+	path = qbRayTrace
+	url = https://github.com/QuantitativeBytes/qbRayTrace.git
