@@ -1,17 +1,19 @@
 #ifndef FIBER_HPP
 #define FIBER_HPP
-#include "coordinate.hpp"
 
-#include <iostream>
+#include "coordinate.hpp"
+#include "ray.hpp"
 
 class Fiber {
-private:
-    int length;
-    int height;
-    int index;
-    Co start;
 public:
-    Fiber(int length, int height, int index, Co start);
+    Co topLeft, bottomRight;
+
+    // Constructor
+    Fiber(Co tl, Co br);
+
+    // Controleer of een Ray met de Fiber botst
+    bool checkCollision(const Ray& ray);
 };
 
-#endif
+#endif // FIBER_HPP
+

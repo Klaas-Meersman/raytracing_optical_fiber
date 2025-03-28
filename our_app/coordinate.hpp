@@ -1,9 +1,19 @@
 struct Co
 {
-private:
+public:
     int x;
     int y;
+    
+    //constructor
+    Co(int x, int y);
 
-public:
+    //destructor
+    ~Co();
+
     Co& getCo();
+
+
+
+
+
 };
