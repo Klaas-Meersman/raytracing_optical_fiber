@@ -1,6 +1,9 @@
 struct Co
 {
-public:
+private:
     int x;
     int y;
+
+public:
+    Co& getCo();
 };
