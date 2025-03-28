@@ -1,7 +1,0 @@
-ninja_dyndep_version = 1.0
-build CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o: dyndep
-
-build CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o: dyndep
-
-build CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: dyndep
-
