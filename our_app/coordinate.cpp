@@ -1,10 +1,8 @@
-#ifndef COORDINATE_H
-#define COORDINATE_H
 
-Co::Co(int l, int h, int x) : length(l), height(h),index(x){}
-gi
+#include "coordinate.hpp"
 
 
-#endif // COORDINATE_H
-
+Co& Co::getCo() {
+    return *this;
+}
 
