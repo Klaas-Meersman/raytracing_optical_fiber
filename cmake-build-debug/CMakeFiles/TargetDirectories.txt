@@ -1,0 +1,3 @@
+/home/klaas/github/raytracing_optical_fiber/cmake-build-debug/CMakeFiles/raytracing_optical_fiber.dir
+/home/klaas/github/raytracing_optical_fiber/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/klaas/github/raytracing_optical_fiber/cmake-build-debug/CMakeFiles/rebuild_cache.dir

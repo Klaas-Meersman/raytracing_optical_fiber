@@ -1,0 +1,21 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"dir-cur-bld" : "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug",
+	"dir-cur-src" : "/home/klaas/github/raytracing_optical_fiber",
+	"dir-top-bld" : "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug",
+	"dir-top-src" : "/home/klaas/github/raytracing_optical_fiber",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/home/klaas/github/raytracing_optical_fiber/."
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug/CMakeFiles/untitled.dir"
+}

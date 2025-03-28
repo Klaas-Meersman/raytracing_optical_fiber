@@ -1,0 +1,11 @@
+{
+"rules": [
+{
+"primary-output": "CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o",
+"requires": [
+]
+}
+],
+"version": 0,
+"revision": 0
+}
