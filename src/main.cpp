@@ -10,21 +10,51 @@
 
 int main(){
 
-    double length_fiber = 10;
-    double width_fiber = 1;
-
+    double length_fiber = 15;
+    double width_fiber = 5;
+    Fiber fiber = Fiber(width_fiber,length_fiber);
 
     Coordinate startCo = Coordinate(0,0);
-    double angleDegrees = 50;
-    double angleRadians = angleDegrees / 180 * std::numbers::pi;
-    Ray r = Ray(startCo,angleRadians,length_fiber + width_fiber);
-    std::vector<Coordinate> rayCo = r.generateStraightPath(0.4);
+    double_t angleDegrees = 40;
+    double_t angleRadians = angleDegrees / 180 * std::numbers::pi;
+    Ray r = Ray(startCo,angleRadians,3);
+    //std::cout << "Ray: " << r << std::endl;
+    std::vector<Coordinate> rayCo = r.generateStraightPath(fiber, 0.2);
     for (int i = 0; i < rayCo.size(); i++) {
         std::cout << rayCo[i] << std::endl;
     }
 
-    r.generateBounceRay(r);
 
+
+
+    Ray bouncedRay1= r.generateBounceRay(fiber);
+    //std::cout << "Bounced Ray 1: " << bouncedRay1 << std::endl;
+    std::vector<Coordinate> bouncedRayCo1 = bouncedRay1.generateStraightPath(fiber, 0.2);
+    for (int i = 0; i < bouncedRayCo1.size(); i++) {
+        std::cout << bouncedRayCo1[i] << std::endl;
+    }
+
+    Ray bouncedRay2= bouncedRay1.generateBounceRay(fiber);
+    //std::cout << "Bounced Ray 2: " << bouncedRay2 << std::endl;
+    std::vector<Coordinate> bouncedRayCo2 = bouncedRay2.generateStraightPath(fiber, 0.2);
+    for (int i = 0; i < bouncedRayCo2.size(); i++) {
+        std::cout << bouncedRayCo2[i] << std::endl;
+    }
+
+    Ray bouncedRay3= bouncedRay2.generateBounceRay(fiber);
+    //std::cout << "Bounced Ray 3: " << bouncedRay3 << std::endl;
+    std::vector<Coordinate> bouncedRayCo3 = bouncedRay3.generateStraightPath(fiber, 0.2);
+    for (int i = 0; i < bouncedRayCo3.size(); i++) {
+        std::cout << bouncedRayCo3[i] << std::endl;
+    }
+    Ray bouncedRay4= bouncedRay3.generateBounceRay(fiber);
+    //std::cout << "Bounced Ray 4: " << bouncedRay4 << std::endl;
+    std::vector<Coordinate> bouncedRayCo4 = bouncedRay4.generateStraightPath(fiber, 0.2);
+    for (int i = 0; i < bouncedRayCo4.size(); i++) {
+        std::cout << bouncedRayCo4[i] << std::endl;
+    }
+
+ 
 
     return 0;
 }

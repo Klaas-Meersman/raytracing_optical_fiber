@@ -153,6 +153,30 @@ src/coordinate.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.s
 .PHONY : src/coordinate.cpp.s
 
+src/fiber.o: src/fiber.cpp.o
+.PHONY : src/fiber.o
+
+# target to build an object file
+src/fiber.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o
+.PHONY : src/fiber.cpp.o
+
+src/fiber.i: src/fiber.cpp.i
+.PHONY : src/fiber.i
+
+# target to preprocess a source file
+src/fiber.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.i
+.PHONY : src/fiber.cpp.i
+
+src/fiber.s: src/fiber.cpp.s
+.PHONY : src/fiber.s
+
+# target to generate assembly for a file
+src/fiber.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.s
+.PHONY : src/fiber.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -213,6 +237,9 @@ help:
 	@echo "... src/coordinate.o"
 	@echo "... src/coordinate.i"
 	@echo "... src/coordinate.s"
+	@echo "... src/fiber.o"
+	@echo "... src/fiber.i"
+	@echo "... src/fiber.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -10,7 +10,7 @@ private:
 
 public:
     //constructor
-  Ray(Coordinate start, double_t angleOfDeparture, double maxLength);
+  Ray(Coordinate start, double_t angleOfDeparture, int maxLength);
   //destructor
   ~Ray();
 
@@ -33,6 +33,15 @@ private:
 
     //this would typically be no longer than width + length of the fiber it is in
 public:
-    std::vector<Coordinate> generateStraightPath(double dx);
-    Ray generateBounceRay(Ray incomingRay, Fiber fiber);
+    std::vector<Coordinate> generateStraightPath(Fiber fiber, double dx);
+    Ray generateBounceRay(Fiber fiber);
+    //getters for start
+    inline Coordinate getStart() const { return start; }
+    inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
+    inline Direction getDirection() const { return direction; }
+    //tostring
+    friend std::ostream& operator<<(std::ostream& os, const Ray& r) {
+        os << "Ray(start: " << r.start << ", angleOfDeparture: " << r.angleOfDeparture/std::numbers::pi*180 << ", direction: " << (r.direction == Direction::UP ? "UP" : "DOWN") << ")";
+        return os;
+    }
 };

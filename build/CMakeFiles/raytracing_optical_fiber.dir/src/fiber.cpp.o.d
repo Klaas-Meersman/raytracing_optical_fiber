@@ -1,7 +1,7 @@
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: \
- /home/klaas/github/raytracing_optical_fiber/src/ray.cpp \
+CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o: \
+ /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp \
  /usr/include/stdc-predef.h \
- /home/klaas/github/raytracing_optical_fiber/src/ray.hpp \
+ /home/klaas/github/raytracing_optical_fiber/src/fiber.hpp \
  /usr/include/c++/14/vector /usr/include/c++/14/bits/requires_hosted.h \
  /usr/include/c++/14/x86_64-redhat-linux/bits/c++config.h \
  /usr/include/bits/wordsize.h \
@@ -156,4 +156,4 @@ CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: \
  /usr/include/c++/14/bits/locale_facets.tcc \
  /usr/include/c++/14/bits/basic_ios.tcc \
  /usr/include/c++/14/bits/ostream.tcc \
- /home/klaas/github/raytracing_optical_fiber/src/fiber.hpp
+ /home/klaas/github/raytracing_optical_fiber/src/ray.hpp

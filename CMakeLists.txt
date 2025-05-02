@@ -15,4 +15,6 @@ add_executable(raytracing_optical_fiber
         src/coordinate.hpp
         src/main.cpp
         src/ray.cpp
-        src/ray.hpp)
+        src/ray.hpp
+        src/fiber.cpp
+        src/fiber.hpp)
