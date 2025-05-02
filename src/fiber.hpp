@@ -16,4 +16,12 @@ public:
     inline int Fiber::maxSingleRayInFiber(){
         return width+length;
     }
+
+    //getters for top y
+    inline double_t Fiber::getTopY(){
+        return topY;
+    }
+    inline double_t Fiber::getBottomY(){
+        return bottomY;
+    }
 };

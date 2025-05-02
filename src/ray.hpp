@@ -1,5 +1,6 @@
 #include <vector>
 #include "coordinate.hpp"
+#include "fiber.hpp"
 
 
 class Ray
@@ -33,5 +34,5 @@ private:
     //this would typically be no longer than width + length of the fiber it is in
 public:
     std::vector<Coordinate> generateStraightPath(double dx);
-    Ray generateBounceRay(Ray r);
+    Ray generateBounceRay(Ray incomingRay, Fiber fiber);
 };

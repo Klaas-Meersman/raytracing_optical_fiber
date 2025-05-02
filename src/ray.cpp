@@ -40,13 +40,13 @@ std::vector<Coordinate> Ray::generateStraightPath(double dx){
 
 
 //generate start coordinate with a = b/(tan@)
-Ray Ray::generateBounceRay(Ray incomingRay, double_t topYFiber, double_t bottomYFiber){
+Ray Ray::generateBounceRay(Ray incomingRay, Fiber fiber){
     printf("generating bounce ray\n");
     Coordinate start;
     double_t startx,starty,angleOfDeparture;
     if(incomingRay.direction == Ray::Direction::UP){
-        starty = topYFiber;
-        startx = incomingRay.start.x + (topYFiber - incomingRay.start.y)/std::tan(incomingRay.angleOfDeparture); //so 
+        starty = fiber.getTopY();;
+        startx = incomingRay.start.x + (fiber.getTopY() - incomingRay.start.y)/std::tan(incomingRay.angleOfDeparture); //so 
         start = Coordinate(startx,starty);
         angleOfDeparture = 2 * std::number::pi*2 - incomingRay.angleOfDeparture;
         return Ray(start, angleOfDeparture, 100); //100 has to be replaced
