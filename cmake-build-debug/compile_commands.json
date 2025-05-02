@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp",
+  "file": "/home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o"
+},
+{
+  "directory": "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/main.cpp",
+  "file": "/home/klaas/github/raytracing_optical_fiber/src/main.cpp",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/klaas/github/raytracing_optical_fiber/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/ray.cpp",
+  "file": "/home/klaas/github/raytracing_optical_fiber/src/ray.cpp",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o"
+}
+]
