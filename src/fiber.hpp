@@ -9,21 +9,16 @@ class Fiber
 {
 private:
     const double_t width, length;
-    
-
 public:
-    //constructor
     Fiber(double_t width, double_t length);
-    //destructor
-     ~Fiber();
-    //this would typically be no longer than width + length of the fiber it is in
-    int maxSingleRayInFiber(double_t startX);
+    Fiber(const Fiber& other);
+    Fiber& operator=(const Fiber& other);
+    ~Fiber();
 
-    //getters for top y
-    inline double_t getTopY(){
+    inline double_t getTopY() const{
         return width/2;
     }
-    inline double_t getBottomY(){
+    inline double_t getBottomY()const {
         return -width/2;
     }
     inline double_t getWidth() const { return width; }

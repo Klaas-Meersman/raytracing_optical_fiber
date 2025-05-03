@@ -4,33 +4,58 @@
 #include <numbers>
 
 
-
-
+Ray::Ray()
+    : start(0, 0), end(0, 0), angleOfDeparture(0), fiber(Fiber(1, 1)), direction(Direction::UP), endHitFiber(false) {
+}
 
 //constructor def
-Ray::Ray(Coordinate start, double_t angleOfDeparture, int maxLength)
-    : start(start), angleOfDeparture(angleOfDeparture), maxLength(maxLength) {
+Ray::Ray(Coordinate start, double_t angleOfDeparture,const Fiber &fiber)
+    : start(start), angleOfDeparture(angleOfDeparture),fiber(fiber) {
 
     if (angleOfDeparture > 0 && angleOfDeparture < std::numbers::pi / 2) {
         direction = Direction::UP;
+        this->end.y = fiber.getTopY();
+        this->end.x = this->start.x + (fiber.getTopY() - this->start.y)/std::tan(this->angleOfDeparture);
     } else if (angleOfDeparture > 3 * std::numbers::pi / 4 && angleOfDeparture < 2 * std::numbers::pi) {
         direction = Direction::DOWN;
+        this->end.y = fiber.getBottomY();
+        this->end.x = this->start.x + (fiber.getBottomY() - this->start.y)/std::tan(this->angleOfDeparture); 
     } else if (angleOfDeparture > std::numbers::pi / 2 && angleOfDeparture < 3 * std::numbers::pi / 4) {
         throw std::invalid_argument("This is an unexpected direction as all rays should go from left to right. Angle of departure is between pi/2 and 3pi/4: " + std::to_string(angleOfDeparture));
     } else {
         throw std::invalid_argument("This is an unexpected direction as all rays should go from left to right. Angle of departure is: " + std::to_string(angleOfDeparture/std::numbers::pi));
     }
+    if(this->end.x > fiber.getLength()){
+        this->endHitFiber = true;
+        this->end.x = fiber.getLength();
+        this->end.y = std::tan(this->angleOfDeparture) * (fiber.getLength() - this->start.x) + this->start.y;
+    }
 
-    
 }
 
+//copy constructor
+Ray::Ray(const Ray& other)
+    : start(other.start), end(other.end), angleOfDeparture(other.angleOfDeparture),
+     fiber(other.fiber),direction(other.direction), endHitFiber(other.endHitFiber) {
+}
 
+Ray& Ray::operator=(const Ray& other) {
+    if (this != &other) {
+        start = other.start;
+        end = other.end;
+        angleOfDeparture = other.angleOfDeparture;
+        direction = other.direction;
+        endHitFiber = other.endHitFiber;
+        // No need to assign fiber, as it is a reference
+    }
+    return *this;
+}
 
 Ray::~Ray(){
 }
 
-//we can't really use this. would be to many calculations that are not necesary
-std::vector<Coordinate> Ray::generateStraightPath(Fiber fiber, double dx){
+//we can't really use this. would be to many calculations that are not necesary, go to show if it works
+std::vector<Coordinate> Ray::generateStraightPath(double dx){
     std::vector<Coordinate> path;
     Coordinate current = start;
     double_t dy = std::tan(angleOfDeparture) * dx;
@@ -42,8 +67,6 @@ std::vector<Coordinate> Ray::generateStraightPath(Fiber fiber, double dx){
         if (current.y > fiber.getTopY() || current.y < fiber.getBottomY()) {
             break;
         }
-
-        //add the end point to the path if it is the last ray
         if(this->endHitFiber){
             if(current.x > fiber.getLength()){
                 path.push_back(this->end);
@@ -57,32 +80,8 @@ std::vector<Coordinate> Ray::generateStraightPath(Fiber fiber, double dx){
 
 
 Ray Ray::generateBounceRay(Fiber fiber){
-    Coordinate start;
-    double_t startX,startY,angleOfDeparture;
-
-    if(this->direction == Ray::Direction::UP){
-        this->end.y = startY = fiber.getTopY();
-        this->end.x = startX = this->start.x + (fiber.getTopY() - this->start.y)/std::tan(this->angleOfDeparture); //so 
-    }else if(this->direction == Ray::Direction::DOWN){
-        this->end.y = startY = fiber.getBottomY();
-        this->end.x = startX = this->start.x + (fiber.getBottomY() - this->start.y)/std::tan(this->angleOfDeparture); //so
-    }
-    //check if it is the last ray
-    if(startX > fiber.getLength()){
-        this->endHitFiber = true;
-        this->end.x = fiber.getLength();
-        this->end.y = std::tan(this->angleOfDeparture) * (fiber.getLength() - this->start.x) + this->start.y;
-        return *this; //incase its the last ray, we return the ray again instead of a new one
-    }
-    start = Coordinate(startX,startY);
-    angleOfDeparture =  std::numbers::pi*2 - this->angleOfDeparture;
-    Ray bouncedRay = Ray(start, angleOfDeparture, fiber.maxSingleRayInFiber(startX));
+    Coordinate start = Coordinate(this->end.x,this->end.y);
+    double_t angleOfDeparture =  std::numbers::pi*2 - this->angleOfDeparture;
+    Ray bouncedRay = Ray(start, angleOfDeparture, fiber);
     return bouncedRay;
 }
-
-
-
-
-
-
-
