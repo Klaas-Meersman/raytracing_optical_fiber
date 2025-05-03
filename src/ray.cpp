@@ -31,22 +31,21 @@ std::vector<Coordinate> Ray::generateStraightPath(Fiber fiber, double dx){
     std::vector<Coordinate> path;
     Coordinate current = start;
     double_t dy = std::tan(angleOfDeparture) * dx;
-
+    path.push_back(current);
     double i = 0;
-    while (current.y <= fiber.getTopY() && current.y >= fiber.getBottomY()) {
+    while (true) {
         current.x += dx;
         current.y += dy;
+        if (current.y > fiber.getTopY() || current.y < fiber.getBottomY()) {
+            break;
+        }
         path.push_back(current);
-        i+=dx;
     }
-
     return path;
 }
 
 
-//generate start coordinate with a = b/(tan@)
 Ray Ray::generateBounceRay(Fiber fiber){
-    //printf("generating bounce ray\n");
     Coordinate start;
     double_t startX,startY,angleOfDeparture;
 
