@@ -79,7 +79,7 @@ std::vector<Coordinate> Ray::generateStraightPath(double dx){
 }
 
 
-Ray Ray::generateBounceRay(Fiber fiber){
+Ray Ray::generateBounceRay(const Fiber& fiber){
     Coordinate start = Coordinate(this->end.x,this->end.y);
     double_t angleOfDeparture =  std::numbers::pi*2 - this->angleOfDeparture;
     Ray bouncedRay = Ray(start, angleOfDeparture, fiber);

@@ -20,14 +20,14 @@ public:
 private:
     Coordinate start;
     Coordinate end;
-    Fiber fiber;
+    const Fiber& fiber;
     double_t angleOfDeparture;
     Direction direction;
     bool endHitFiber = false;
 
 public:
     std::vector<Coordinate> generateStraightPath(double dx);
-    Ray generateBounceRay(Fiber fiber);
+    Ray generateBounceRay(const Fiber& fiber);
     inline Coordinate getStart() const { return start; }
     inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
     inline Direction getDirection() const { return direction; }

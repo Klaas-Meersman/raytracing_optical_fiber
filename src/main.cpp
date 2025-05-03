@@ -7,10 +7,25 @@
 #include "coordinate.hpp"
 #include "ray.hpp"
 
-int main()
-{
+void traceRay(const Ray& initialRay, const Fiber& fiber) {
+    Ray ray = initialRay;
+    while (!ray.getEndHitFiber()) {
+        std::vector<Coordinate> path = ray.generateStraightPath(0.2);
+        for (const auto& coord : path) {
+            std::cout << coord << std::endl;
+        }
+        ray = ray.generateBounceRay(fiber);
+    }
 
-    double length_fiber = 90;
+    // Process and display the last ray's path
+    std::vector<Coordinate> finalPath = ray.generateStraightPath(0.2);
+    for (const auto& coord : finalPath) {
+        std::cout << coord << std::endl;
+    }
+}
+
+int main(){
+    double length_fiber = 1002;
     double width_fiber = 5;
     Fiber fiber = Fiber(width_fiber, length_fiber);
     printf("fiber_length,%f\n", fiber.getLength());
@@ -22,21 +37,7 @@ int main()
     double_t angleDegrees = 30;
     double_t angleRadians = angleDegrees / 180 * std::numbers::pi;
 
-    Ray r = Ray(startCo, angleRadians, fiber);
-    //std::cout << "Start ray: " << r << std::endl;
-    std::vector<Coordinate> rayCo = r.generateStraightPath(0.2);
-    for (int i = 0; i < rayCo.size(); i++){
-        std::cout << rayCo[i] << std::endl;
-    }
-
-    Ray bouncedRay = r;
-    while (!bouncedRay.getEndHitFiber()){
-        bouncedRay = bouncedRay.generateBounceRay(fiber);
-        //std::cout << "Bounced ray: " << bouncedRay << std::endl;
-        std::vector<Coordinate> bouncedRayCo = bouncedRay.generateStraightPath(0.2);
-        for (int i = 0; i < bouncedRayCo.size(); i++){
-            std::cout << bouncedRayCo[i] << std::endl;
-        }
-    }
+    Ray initialRay = Ray(startCo, angleRadians, fiber);
+    traceRay(initialRay, fiber);
     return 0;
 }
