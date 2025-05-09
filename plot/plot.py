@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # Bestand openen en cijfers inlezen
-with open("src/data.txt", "r") as f:
+with open("plot/data.txt", "r") as f:
     content = f.read()
 
 # Getallen extraheren

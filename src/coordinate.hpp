@@ -36,7 +36,7 @@ inline double Coordinate::distance(const Coordinate& other) const noexcept {
 
 //tostring
 inline std::ostream& operator<<(std::ostream& os, const Coordinate& c) {
-    os << "(" << c.x << " , " << c.y << ")";
+    os << c.x << "," << c.y;
     return os;
 }
 

@@ -1,6 +1,0 @@
-C:\Windows\system32\wsl.exe --distribution Ubuntu --exec /bin/bash -c "export CMAKE_COLOR_DIAGNOSTICS=ON && export CLION_IDE=TRUE && export JETBRAINS_IDE=TRUE && cd '/mnt/c/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber/cmake-build-debug' && /usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G 'CodeBlocks - Unix Makefiles' -S '/mnt/c/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber' -B '/mnt/c/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber/cmake-build-debug'"
-CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-  CMake 3.30 or higher is required.  You are running version 3.22.1
-
-
--- Configuring incomplete, errors occurred!

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.20)
 project(raytracing_optical_fiber)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -15,4 +15,6 @@ add_executable(raytracing_optical_fiber
         src/coordinate.hpp
         src/main.cpp
         src/ray.cpp
-        src/ray.hpp src/ray.cpp src/ray.cpp)
+        src/ray.hpp
+        src/fiber.cpp
+        src/fiber.hpp)

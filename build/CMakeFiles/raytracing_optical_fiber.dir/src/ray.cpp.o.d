@@ -155,4 +155,5 @@ CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: \
  /usr/include/c++/14/x86_64-redhat-linux/bits/ctype_inline.h \
  /usr/include/c++/14/bits/locale_facets.tcc \
  /usr/include/c++/14/bits/basic_ios.tcc \
- /usr/include/c++/14/bits/ostream.tcc
+ /usr/include/c++/14/bits/ostream.tcc \
+ /home/klaas/github/raytracing_optical_fiber/src/fiber.hpp
