@@ -28,7 +28,9 @@ private:
 public:
     std::vector<Coordinate> generateStraightPath(double dx);
     Ray generateBounceRay(const Fiber& fiber);
+    Ray propagateRay();
     inline Coordinate getStart() const { return start; }
+    inline Coordinate getEnd() const { return end; }
     inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
     inline Direction getDirection() const { return direction; }
     inline bool getEndHitFiber() const { return endHitFiber; }

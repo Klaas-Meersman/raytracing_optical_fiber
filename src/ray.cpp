@@ -11,7 +11,7 @@ Ray::Ray()
 //constructor def
 Ray::Ray(Coordinate start, double_t angleOfDeparture,const Fiber &fiber)
     : start(start), angleOfDeparture(angleOfDeparture),fiber(fiber) {
-
+        //this->propagateRay();
     if (angleOfDeparture > 0 && angleOfDeparture < std::numbers::pi / 2) {
         direction = Direction::UP;
         this->end.y = fiber.getTopY();
@@ -30,7 +30,6 @@ Ray::Ray(Coordinate start, double_t angleOfDeparture,const Fiber &fiber)
         this->end.x = fiber.getLength();
         this->end.y = std::tan(this->angleOfDeparture) * (fiber.getLength() - this->start.x) + this->start.y;
     }
-
 }
 
 //copy constructor
@@ -84,4 +83,32 @@ Ray Ray::generateBounceRay(const Fiber& fiber){
     double_t angleOfDeparture =  std::numbers::pi*2 - this->angleOfDeparture;
     Ray bouncedRay = Ray(start, angleOfDeparture, fiber);
     return bouncedRay;
+}
+
+Ray Ray::propagateRay(){
+    //printf("Start: %f,%f\n", this->start.x, this->start.y);
+    //printf("End: %f,%f\n", this->end.x, this->end.y);
+    this->start.x = this->end.x;
+    this->start.y = this->end.y;
+    this->angleOfDeparture = std::numbers::pi*2 - this->angleOfDeparture;
+    if (angleOfDeparture > 0 && angleOfDeparture < std::numbers::pi / 2) { //or just check direction and switch direction
+        this->direction = Direction::UP;
+        this->end.y = fiber.getTopY();
+        this->end.x = this->start.x + (fiber.getTopY() - this->start.y)/std::tan(this->angleOfDeparture);
+    } else if (angleOfDeparture > 3 * std::numbers::pi / 4 && angleOfDeparture < 2 * std::numbers::pi) {
+        this->direction = Direction::DOWN;
+        this->end.y = fiber.getBottomY();
+        this->end.x = this->start.x + (fiber.getBottomY() - this->start.y)/std::tan(this->angleOfDeparture); 
+    } else if (angleOfDeparture > std::numbers::pi / 2 && angleOfDeparture < 3 * std::numbers::pi / 4) {
+        throw std::invalid_argument("This is an unexpected direction as all rays should go from left to right. Angle of departure is between pi/2 and 3pi/4: " + std::to_string(angleOfDeparture));
+    } else {
+        throw std::invalid_argument("This is an unexpected direction as all rays should go from left to right. Angle of departure is: " + std::to_string(angleOfDeparture/std::numbers::pi));
+    }
+    if(this->end.x > fiber.getLength()){
+        this->endHitFiber = true;
+        this->end.x = fiber.getLength();
+        this->end.y = std::tan(this->angleOfDeparture) * (fiber.getLength() - this->start.x) + this->start.y;
+    }
+    
+    return *this;
 }
