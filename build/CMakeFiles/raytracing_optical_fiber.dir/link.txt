@@ -1,1 +1,1 @@
-/usr/bin/g++ -g CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o -o raytracing_optical_fiber
+/usr/bin/g++ @CMakeFiles/raytracing_optical_fiber.dir/objects1.rsp -o raytracing_optical_fiber @CMakeFiles/raytracing_optical_fiber.dir/linkLibs.rsp -L"/usr/local/cuda/targets/x86_64-linux/lib/stubs" -L"/usr/local/cuda/targets/x86_64-linux/lib"

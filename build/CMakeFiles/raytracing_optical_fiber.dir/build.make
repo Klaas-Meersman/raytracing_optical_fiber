@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/klaas/github/raytracing_optical_fiber
+CMAKE_SOURCE_DIR = /home/nvidiasystem/Documenten/raytracing_optical_fiber
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/klaas/github/raytracing_optical_fiber/build
+CMAKE_BINARY_DIR = /home/nvidiasystem/Documenten/raytracing_optical_fiber/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/raytracing_optical_fiber.dir/depend.make
@@ -69,79 +69,85 @@ include CMakeFiles/raytracing_optical_fiber.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/raytracing_optical_fiber.dir/flags.make
 
-CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
-CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o: /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp
-CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/klaas/github/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o -MF CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o.d -o CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o: CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o: /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.cu
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CUDA object CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o -MF CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o.d -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o
 
-CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp > CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.i
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp -o CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.s
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
-CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o: /home/klaas/github/raytracing_optical_fiber/src/main.cpp
-CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/klaas/github/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o -MF CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o.d -o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/main.cpp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o: CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o: /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.cu
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o -MF CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o.d -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o
 
-CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/klaas/github/raytracing_optical_fiber/src/main.cpp > CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.i
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/klaas/github/raytracing_optical_fiber/src/main.cpp -o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.s
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: /home/klaas/github/raytracing_optical_fiber/src/ray.cpp
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/klaas/github/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o -MF CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o.d -o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/ray.cpp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o: CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o: /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CUDA object CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o -MF CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o.d -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o
 
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/klaas/github/raytracing_optical_fiber/src/ray.cpp > CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.i
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/klaas/github/raytracing_optical_fiber/src/ray.cpp -o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.s
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
-CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o: /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp
-CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/klaas/github/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o -MF CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o.d -o CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o: CMakeFiles/raytracing_optical_fiber.dir/flags.make
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o: CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o: /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.cu
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o: CMakeFiles/raytracing_optical_fiber.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CUDA object CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o -MF CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o.d -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o
 
-CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp > CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.i
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
 
-CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp -o CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.s
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
 # Object files for target raytracing_optical_fiber
 raytracing_optical_fiber_OBJECTS = \
-"CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o" \
-"CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o" \
-"CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o" \
-"CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o"
+"CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o" \
+"CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o" \
+"CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o" \
+"CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o"
 
 # External object files for target raytracing_optical_fiber
 raytracing_optical_fiber_EXTERNAL_OBJECTS =
 
-raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o
-raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o
-raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o
-raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o
 raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/build.make
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/linkLibs.rsp
+raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/objects1.rsp
 raytracing_optical_fiber: CMakeFiles/raytracing_optical_fiber.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/klaas/github/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable raytracing_optical_fiber"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CUDA executable raytracing_optical_fiber"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/raytracing_optical_fiber.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -153,6 +159,6 @@ CMakeFiles/raytracing_optical_fiber.dir/clean:
 .PHONY : CMakeFiles/raytracing_optical_fiber.dir/clean
 
 CMakeFiles/raytracing_optical_fiber.dir/depend:
-	cd /home/klaas/github/raytracing_optical_fiber/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/klaas/github/raytracing_optical_fiber /home/klaas/github/raytracing_optical_fiber /home/klaas/github/raytracing_optical_fiber/build /home/klaas/github/raytracing_optical_fiber/build /home/klaas/github/raytracing_optical_fiber/build/CMakeFiles/raytracing_optical_fiber.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/nvidiasystem/Documenten/raytracing_optical_fiber/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nvidiasystem/Documenten/raytracing_optical_fiber /home/nvidiasystem/Documenten/raytracing_optical_fiber /home/nvidiasystem/Documenten/raytracing_optical_fiber/build /home/nvidiasystem/Documenten/raytracing_optical_fiber/build /home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles/raytracing_optical_fiber.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/raytracing_optical_fiber.dir/depend
 

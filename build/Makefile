@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/klaas/github/raytracing_optical_fiber
+CMAKE_SOURCE_DIR = /home/nvidiasystem/Documenten/raytracing_optical_fiber
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/klaas/github/raytracing_optical_fiber/build
+CMAKE_BINARY_DIR = /home/nvidiasystem/Documenten/raytracing_optical_fiber/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/klaas/github/raytracing_optical_fiber/build/CMakeFiles /home/klaas/github/raytracing_optical_fiber/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles /home/nvidiasystem/Documenten/raytracing_optical_fiber/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/klaas/github/raytracing_optical_fiber/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,101 +129,101 @@ raytracing_optical_fiber/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/build
 .PHONY : raytracing_optical_fiber/fast
 
-src/coordinate.o: src/coordinate.cpp.o
-.PHONY : src/coordinate.o
+srcGPU/coordinate.o: srcGPU/coordinate.cu.o
+.PHONY : srcGPU/coordinate.o
 
 # target to build an object file
-src/coordinate.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o
-.PHONY : src/coordinate.cpp.o
+srcGPU/coordinate.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o
+.PHONY : srcGPU/coordinate.cu.o
 
-src/coordinate.i: src/coordinate.cpp.i
-.PHONY : src/coordinate.i
+srcGPU/coordinate.i: srcGPU/coordinate.cu.i
+.PHONY : srcGPU/coordinate.i
 
 # target to preprocess a source file
-src/coordinate.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.i
-.PHONY : src/coordinate.cpp.i
+srcGPU/coordinate.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.i
+.PHONY : srcGPU/coordinate.cu.i
 
-src/coordinate.s: src/coordinate.cpp.s
-.PHONY : src/coordinate.s
+srcGPU/coordinate.s: srcGPU/coordinate.cu.s
+.PHONY : srcGPU/coordinate.s
 
 # target to generate assembly for a file
-src/coordinate.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.s
-.PHONY : src/coordinate.cpp.s
+srcGPU/coordinate.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.s
+.PHONY : srcGPU/coordinate.cu.s
 
-src/fiber.o: src/fiber.cpp.o
-.PHONY : src/fiber.o
+srcGPU/fiber.o: srcGPU/fiber.cu.o
+.PHONY : srcGPU/fiber.o
 
 # target to build an object file
-src/fiber.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o
-.PHONY : src/fiber.cpp.o
+srcGPU/fiber.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o
+.PHONY : srcGPU/fiber.cu.o
 
-src/fiber.i: src/fiber.cpp.i
-.PHONY : src/fiber.i
+srcGPU/fiber.i: srcGPU/fiber.cu.i
+.PHONY : srcGPU/fiber.i
 
 # target to preprocess a source file
-src/fiber.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.i
-.PHONY : src/fiber.cpp.i
+srcGPU/fiber.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.i
+.PHONY : srcGPU/fiber.cu.i
 
-src/fiber.s: src/fiber.cpp.s
-.PHONY : src/fiber.s
+srcGPU/fiber.s: srcGPU/fiber.cu.s
+.PHONY : srcGPU/fiber.s
 
 # target to generate assembly for a file
-src/fiber.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.s
-.PHONY : src/fiber.cpp.s
+srcGPU/fiber.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.s
+.PHONY : srcGPU/fiber.cu.s
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+srcGPU/main.o: srcGPU/main.cu.o
+.PHONY : srcGPU/main.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+srcGPU/main.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o
+.PHONY : srcGPU/main.cu.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+srcGPU/main.i: srcGPU/main.cu.i
+.PHONY : srcGPU/main.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+srcGPU/main.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.i
+.PHONY : srcGPU/main.cu.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+srcGPU/main.s: srcGPU/main.cu.s
+.PHONY : srcGPU/main.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+srcGPU/main.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.s
+.PHONY : srcGPU/main.cu.s
 
-src/ray.o: src/ray.cpp.o
-.PHONY : src/ray.o
+srcGPU/ray.o: srcGPU/ray.cu.o
+.PHONY : srcGPU/ray.o
 
 # target to build an object file
-src/ray.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o
-.PHONY : src/ray.cpp.o
+srcGPU/ray.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o
+.PHONY : srcGPU/ray.cu.o
 
-src/ray.i: src/ray.cpp.i
-.PHONY : src/ray.i
+srcGPU/ray.i: srcGPU/ray.cu.i
+.PHONY : srcGPU/ray.i
 
 # target to preprocess a source file
-src/ray.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.i
-.PHONY : src/ray.cpp.i
+srcGPU/ray.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.i
+.PHONY : srcGPU/ray.cu.i
 
-src/ray.s: src/ray.cpp.s
-.PHONY : src/ray.s
+srcGPU/ray.s: srcGPU/ray.cu.s
+.PHONY : srcGPU/ray.s
 
 # target to generate assembly for a file
-src/ray.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.s
-.PHONY : src/ray.cpp.s
+srcGPU/ray.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.s
+.PHONY : srcGPU/ray.cu.s
 
 # Help Target
 help:
@@ -234,18 +234,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... raytracing_optical_fiber"
-	@echo "... src/coordinate.o"
-	@echo "... src/coordinate.i"
-	@echo "... src/coordinate.s"
-	@echo "... src/fiber.o"
-	@echo "... src/fiber.i"
-	@echo "... src/fiber.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
-	@echo "... src/ray.o"
-	@echo "... src/ray.i"
-	@echo "... src/ray.s"
+	@echo "... srcGPU/coordinate.o"
+	@echo "... srcGPU/coordinate.i"
+	@echo "... srcGPU/coordinate.s"
+	@echo "... srcGPU/fiber.o"
+	@echo "... srcGPU/fiber.i"
+	@echo "... srcGPU/fiber.s"
+	@echo "... srcGPU/main.o"
+	@echo "... srcGPU/main.i"
+	@echo "... srcGPU/main.s"
+	@echo "... srcGPU/ray.o"
+	@echo "... srcGPU/ray.i"
+	@echo "... srcGPU/ray.s"
 .PHONY : help
 
 

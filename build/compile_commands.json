@@ -1,26 +1,26 @@
 [
 {
-  "directory": "/home/klaas/github/raytracing_optical_fiber/build",
-  "command": "/usr/bin/g++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp",
-  "file": "/home/klaas/github/raytracing_optical_fiber/src/coordinate.cpp",
-  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o"
+  "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o",
+  "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.cu",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o"
 },
 {
-  "directory": "/home/klaas/github/raytracing_optical_fiber/build",
-  "command": "/usr/bin/g++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/main.cpp",
-  "file": "/home/klaas/github/raytracing_optical_fiber/src/main.cpp",
-  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o"
+  "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o",
+  "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.cu",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o"
 },
 {
-  "directory": "/home/klaas/github/raytracing_optical_fiber/build",
-  "command": "/usr/bin/g++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/ray.cpp",
-  "file": "/home/klaas/github/raytracing_optical_fiber/src/ray.cpp",
-  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o"
+  "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o",
+  "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o"
 },
 {
-  "directory": "/home/klaas/github/raytracing_optical_fiber/build",
-  "command": "/usr/bin/g++  -I/home/klaas/github/raytracing_optical_fiber/. -g -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o -c /home/klaas/github/raytracing_optical_fiber/src/fiber.cpp",
-  "file": "/home/klaas/github/raytracing_optical_fiber/src/fiber.cpp",
-  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o"
+  "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o",
+  "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.cu",
+  "output": "CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o"
 }
 ]
