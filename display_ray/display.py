@@ -3,19 +3,29 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
+import platform
+
 
 def build_and_run_c_program(build_dir, binary_name):
     # Step 1: Run cmake ..
     print("Running cmake ..")
     subprocess.run(['cmake', '..'], cwd=build_dir, check=True)
-    # Step 2: Run make
+
+    # Step 2: Run build
     print("Running make")
-    subprocess.run(['make'], cwd=build_dir, check=True)
-    # Step 3: Run the binary and capture output
-    binary_path = os.path.join(build_dir, binary_name)
+    subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
+
+    # Step 3: Build correct path
+    if platform.system() == "Windows":
+        binary_name += ".exe"
+        binary_path = os.path.join(build_dir, "Debug", binary_name)
+    else:
+        binary_path = os.path.join(build_dir, binary_name)
+
     print(f"Running {binary_path}")
-    result = subprocess.run([binary_path], stdout=subprocess.PIPE, text=True, check=True)
+    result = subprocess.run([binary_path], stdout=subprocess.PIPE, text=True, check=False)
     return result.stdout
+
 
 def read_fiber_and_ray_from_string(csv_string):
     lines = csv_string.strip().splitlines()
@@ -32,6 +42,9 @@ def read_fiber_and_ray_from_string(csv_string):
     return fiber_info, ray_df
 
 def plot_fiber_and_ray_from_output(output):
+    print("----- Raw program output -----")
+    print(output)
+    print("----- End of program output -----")
     fiber_info, ray_df = read_fiber_and_ray_from_string(output)
     fiber_length = fiber_info['fiber_length']
     fiber_top_y = fiber_info['fiber_top_y']

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Gebruiker\OneDrive - KU Leuven\Documents\GitHub\raytracing_optical_fiber\build\CMakeFiles\0514cf160c9d60900a65faa3136eb322\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8878443D-1ABB-3182-BC3A-6C276659B744}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

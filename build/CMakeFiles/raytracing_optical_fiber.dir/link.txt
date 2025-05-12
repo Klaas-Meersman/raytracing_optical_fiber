@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/ray.cpp.o CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o -o raytracing_optical_fiber

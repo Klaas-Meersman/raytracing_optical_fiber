@@ -28,7 +28,9 @@ private:
 public:
     std::vector<Coordinate> generateStraightPath(double dx);
     Ray generateBounceRay(const Fiber& fiber);
+    Ray propagateRay();
     inline Coordinate getStart() const { return start; }
+    inline Coordinate getEnd() const { return end; }
     inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
     inline Direction getDirection() const { return direction; }
     inline bool getEndHitFiber() const { return endHitFiber; }
@@ -36,7 +38,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Ray& r) {
         os << "Ray(start: " << r.start << ", angleOfDeparture: " 
-        << r.angleOfDeparture/std::numbers::pi*180 << ", direction: " 
+        << r.angleOfDeparture/3.1415*180 << ", direction: " 
         << (r.direction == Direction::UP ? "UP" : "DOWN") << ")";
         return os;
     }
