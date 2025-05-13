@@ -13,7 +13,7 @@ Ray::Ray()
 __host__ __device__
 Ray::Ray(Coordinate start, double_t angleOfDeparture, const Fiber* fiber)
     : start(start), angleOfDeparture(angleOfDeparture), fiber(fiber), direction(Direction::UP), endHitFiber(false) {
-    if (!fiber) return;
+    //if (!fiber) return;
     if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
         direction = Direction::UP;
         this->end.y = fiber->getTopY();
@@ -34,20 +34,6 @@ Ray::Ray(Coordinate start, double_t angleOfDeparture, const Fiber* fiber)
 }
 
 
-
-// Assignment operator
-__host__ __device__
-Ray& Ray::operator=(const Ray& other) {
-    if (this != &other) {
-        start = other.start;
-        end = other.end;
-        angleOfDeparture = other.angleOfDeparture;
-        fiber = other.fiber;
-        direction = other.direction;
-        endHitFiber = other.endHitFiber;
-    }
-    return *this;
-}
 
 
 

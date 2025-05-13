@@ -11,42 +11,6 @@
 #include <vector>
 #endif
 
-// CPU function to trace rays (host only)
-#ifndef __CUDA_ARCH__
-void traceRaysCPU(const Fiber &fiber, int numRays)
-{
-    std::vector<Ray> rays;
-    double_t angleRadians = 0;
-
-    // lambertian distribution
-    for (int i = 0; i < numRays; ++i)
-    {
-        double u = static_cast<double>(rand()) / RAND_MAX;
-        double theta = std::asin(u);
-
-        if (rand() % 2 == 0)
-            angleRadians = theta;
-        else
-            angleRadians = 3 * std::numbers::pi / 2 + theta;
-
-        Coordinate startCo = Coordinate(0, 0);
-        Ray ray = Ray(startCo, angleRadians, &fiber);
-        rays.push_back(ray);
-    }
-
-    for (const auto &ray : rays)
-    {
-        Ray currentRay = ray;
-        while (!currentRay.getEndHitFiber())
-        {
-            currentRay.propagateRay();
-        }
-        if(currentRay.getEndHitFiber()){
-            std::cout << currentRay.getEnd().x << ", " << currentRay.getEnd().y << std::endl;
-        }
-    }
-}
-#endif
 
 // GPU kernel and GPU wrapper function remain as before, but use Fiber*
 __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
@@ -56,9 +20,13 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
         while (!rays[idx].getEndHitFiber())
         {
             rays[idx].propagateRay();
+            printf("Ray %d: Start (%f, %f), End (%f, %f)\n", idx, rays[idx].getStart().x, rays[idx].getStart().y, rays[idx].getEnd().x, rays[idx].getEnd().y);
         }
     }
 }
+
+
+
 
 void runTraceRayGPU(const Fiber* fiber,int numRays)
 {
@@ -123,19 +91,78 @@ void runTraceRayGPU(const Fiber* fiber,int numRays)
     #endif
 }
 
+
+__global__  void debugRayGPU(const Fiber* fiber, Ray input_ray, Ray* output_rays, int maxBounces)
+{
+    int idx = 0;
+
+    while(!input_ray.getEndHitFiber() && idx< maxBounces)
+    {
+        printf("Ray %d: Start (%f, %f), End (%f, %f)\n", idx, input_ray.getStart().x, input_ray.getStart().y, input_ray.getEnd().x, input_ray.getEnd().y);
+        input_ray.propagateRay();
+        output_rays[idx] = input_ray;
+        idx++;
+    }
+}
+
+void runDebugTraceRayGPU(const Fiber* fiber){
+    double_t angleDegrees = 30;
+    double_t angleRadians = angleDegrees * (M_PI / 180.0);
+
+    Coordinate startCo = Coordinate(0, 0);
+    Ray ray = Ray(startCo, angleRadians, fiber);
+
+    int maxBounces = 100; // Set to a reasonable upper limit
+
+    Ray* output_rays;
+    cudaMalloc((void**)&output_rays, maxBounces * sizeof(Ray));
+
+    // Launch kernel with 1 thread (since only one ray)
+    debugRayGPU<<<1, 1>>>(fiber, ray, output_rays, maxBounces);
+    cudaDeviceSynchronize();
+
+    // Copy results back
+    Ray* rays = new Ray[maxBounces];
+    cudaMemcpy(rays, output_rays, maxBounces * sizeof(Ray), cudaMemcpyDeviceToHost);
+
+    // Print all intermediate rays
+    for (int i = 0; i < maxBounces; ++i) {
+        // Stop printing if the ray has hit the fiber end
+        if (rays[i].getEndHitFiber() || (i > 0 && rays[i].getStart().x == rays[i].getEnd().x && rays[i].getStart().y == rays[i].getEnd().y)) {
+            std::cout << "Bounce " << i << ": (" << rays[i].getStart().x << ", " << rays[i].getStart().y << ") -> ("
+                      << rays[i].getEnd().x << ", " << rays[i].getEnd().y << ") [endHitFiber=" << rays[i].getEndHitFiber() << "]\n";
+            break;
+        }
+        std::cout << "Bounce " << i << ": (" << rays[i].getStart().x << ", " << rays[i].getStart().y << ") -> ("
+                  << rays[i].getEnd().x << ", " << rays[i].getEnd().y << ") [endHitFiber=" << rays[i].getEndHitFiber() << "]\n";
+    }
+
+    cudaFree(output_rays);
+    delete[] rays;
+}
+
 int main()
 {
-    double length_fiber = 100;
+    //Density simulation
+ /*    double length_fiber = 100;
     double width_fiber = 5;
     Fiber fiber(width_fiber, length_fiber);
     printf("fiber_length,%f\n", fiber.getLength());
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
     printf("x,y\n");
 
-    int numRays = 100000000;
+    int numRays = 1000000;
 
-    runTraceRayGPU(&fiber, numRays);
-    
+    runTraceRayGPU(&fiber, numRays); */
+
+
+    double length_fiber = 100;
+    double width_fiber = 5;
+    Fiber fiber(width_fiber, length_fiber);
+    printf("fiber_length,%f\n", fiber.getLength());
+    printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
+    printf("x,y\n");
+    runDebugTraceRayGPU(&fiber);
 
     return 0;
 }
