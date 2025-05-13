@@ -130,8 +130,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/klaas/github/raytracing_optical_fiber/build",
-		"source" : "/home/klaas/github/raytracing_optical_fiber"
+		"build" : "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
+		"source" : "/home/nvidiasystem/Documenten/raytracing_optical_fiber"
 	},
 	"version" : 
 	{
