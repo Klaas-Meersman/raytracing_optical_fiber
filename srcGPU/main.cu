@@ -60,8 +60,39 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
     }
 }
 
-void runTraceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
+void runTraceRayGPU(const Fiber* fiber,int numRays)
 {
+    // Only use std::vector on the host
+    #ifndef __CUDA_ARCH__
+    std::vector<Ray> rays_vector;
+    double_t angleRadians = 0;
+
+    //lambertian distrubtion
+    for (int i = 0; i < numRays; ++i)
+    {
+        double u = static_cast<double>(rand()) / RAND_MAX; // Uniform in [0,1]
+        double theta = std::asin(u); // θ in [0, π/2] radians
+    
+        // Randomly choose between [0, 90] and [270, 360]
+        if (rand() % 2 == 0)
+        {
+            // [0, 90] degrees
+            angleRadians = theta;
+        }
+        else
+        {
+            // [270, 360] degrees
+            angleRadians = 3 * M_PI / 2 + theta;
+        }
+
+        Coordinate startCo = Coordinate(0, 0);
+        Ray ray = Ray(startCo, angleRadians, fiber);
+        rays_vector.push_back(ray);
+    }
+    Ray* rays = rays_vector.data();
+    
+   
+
     int blockSize = 256;
     int numBlocks = (numRays + blockSize - 1) / blockSize;
 
@@ -89,6 +120,7 @@ void runTraceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
             std::cout << rays[i].getEnd().x << ", " << rays[i].getEnd().y << std::endl;
         }
     }
+    #endif
 }
 
 int main()
@@ -100,36 +132,10 @@ int main()
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
     printf("x,y\n");
 
-    int numRays = 10000000;
+    int numRays = 100000000;
 
-    // Only use std::vector on the host
-    #ifndef __CUDA_ARCH__
-    std::vector<Ray> rays;
-    double_t angleRadians = 0;
-    for (int i = 0; i < numRays; ++i)
-    {
-        double u = static_cast<double>(rand()) / RAND_MAX; // Uniform in [0,1]
-        double theta = std::asin(u); // θ in [0, π/2] radians
+    runTraceRayGPU(&fiber, numRays);
     
-        // Randomly choose between [0, 90] and [270, 360]
-        if (rand() % 2 == 0)
-        {
-            // [0, 90] degrees
-            angleRadians = theta;
-        }
-        else
-        {
-            // [270, 360] degrees
-            angleRadians = 3 * M_PI / 2 + theta;
-        }
-
-        Coordinate startCo = Coordinate(0, 0);
-        Ray ray = Ray(startCo, angleRadians, &fiber);
-        rays.push_back(ray);
-    }
-    // Pass the data pointer to the GPU function
-    runTraceRayGPU(&fiber, rays.data(), numRays);
-    #endif
 
     return 0;
 }
