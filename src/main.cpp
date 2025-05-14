@@ -76,17 +76,23 @@ void traceRays(const Fiber &fiber, int numRays)
         rays.push_back(ray);
     }
 
+    const int maxbounces = 10000;
     // for all rays, propagate until they hit the fiber, then print their end coordinates
     for (const auto &ray : rays)
     {
+        int bounce = 0;
         Ray currentRay = ray;
-        while (!currentRay.getEndHitFiber())
+        while (!currentRay.getEndHitFiber() && bounce < maxbounces)
         {
             currentRay.propagateRay();
+            bounce++;
+            if (bounce == maxbounces) {
+                std::cout << "Hit max bounces\n";
+            }
         }
-        if(currentRay.getEndHitFiber()){
+        /* if(currentRay.getEndHitFiber()){
             std::cout << currentRay.getEnd().x << ", " << currentRay.getEnd().y << std::endl;
-        }
+        } */
         //std::cout << currentRay.getStart().x << ", " << currentRay.getStart().y << ")" << std::endl;
     }
 }
