@@ -50,6 +50,6 @@ def plot_density_from_c_output(build_dir, binary_name):
     plt.show()
 
 # Since you're already in the build directory, use current directory
-build_dir = '.'  # Use current directory instead of 'build'
+build_dir = 'build'  # Use current directory instead of 'build'
 binary_name = 'raytracing_optical_fiber'
 plot_density_from_c_output(build_dir, binary_name)
