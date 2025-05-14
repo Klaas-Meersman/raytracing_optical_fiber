@@ -60,23 +60,25 @@ public:
     __host__ __device__ inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
     __host__ __device__ inline bool getEndHitFiber() const { return endHitFiber; }
     __host__ __device__ inline void setEndHitFiber(bool endHitFiber) { this->endHitFiber = endHitFiber; }
-    // CUDA-compatible propagateRay (in-place, returns void)
+
     __host__ __device__ inline Ray propagateRay() {
+        //printf("I propagate \n");
         this->start.x = this->end.x;
         this->start.y = this->end.y;
         this->angleOfDeparture = M_PI*2 - this->angleOfDeparture;
 
-        if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
+        if (angleOfDeparture >= 0 && angleOfDeparture < M_PI / 2) {
             this->end.y = fiber->getTopY();
             this->end.x = this->start.x + (fiber->getTopY() - this->start.y) / std::tan(this->angleOfDeparture);
-        } else if (angleOfDeparture > 3 * M_PI / 4 && angleOfDeparture < 2 * M_PI) {
+        } else if (angleOfDeparture > 3 * M_PI / 4 && angleOfDeparture <= 2 * M_PI) {
             this->end.y = fiber->getBottomY();
             this->end.x = this->start.x + (fiber->getBottomY() - this->start.y) / std::tan(this->angleOfDeparture); 
         } else {
             printf("DO I PASS HERE? I shouldn't\n");
+            printf("angleOfDeparture: %f\n", angleOfDeparture);
         }
 
-        if(this->end.x > fiber->getLength()){
+        if(this->end.x >= fiber->getLength()){
             this->endHitFiber = true;
             this->end.x = fiber->getLength();
             this->end.y = std::tan(this->angleOfDeparture) * (fiber->getLength() - this->start.x) + this->start.y;

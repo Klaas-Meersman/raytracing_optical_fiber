@@ -289,9 +289,4 @@ CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o : /home/nvidiasystem/Do
     /usr/include/c++/14/bits/istream.tcc \
     /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.hpp \
     /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.hpp \
-    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.hpp \
-    /usr/include/c++/14/vector \
-    /usr/include/c++/14/bits/stl_uninitialized.h \
-    /usr/include/c++/14/bits/stl_vector.h \
-    /usr/include/c++/14/bits/stl_bvector.h \
-    /usr/include/c++/14/bits/vector.tcc
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.hpp
