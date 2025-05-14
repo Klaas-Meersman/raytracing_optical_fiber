@@ -161,7 +161,7 @@ int main(){
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
     printf("x,y\n");
 
-    int numRays = 10000000;
+    int numRays = 1000000;
 
     runTraceRayGPU(&fiber, numRays);
 }
