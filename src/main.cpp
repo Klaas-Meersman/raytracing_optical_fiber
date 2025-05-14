@@ -106,7 +106,7 @@ int main()
 
     printf("x,y\n");
 
-    int numRays = 1000000;
+    int numRays = 10000000;
     traceRays(fiber, numRays);
 
     return 0;
