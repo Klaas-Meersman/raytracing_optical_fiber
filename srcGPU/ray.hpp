@@ -12,10 +12,29 @@ class Ray
 public:
     // Mark constructors and destructor as __host__ __device__
     __host__ __device__ Ray();
-    __host__ __device__ Ray(Coordinate start, double_t angleOfDeparture, const Fiber* fiber);
+    // Constructor with Fiber pointer
+    __host__ __device__ Ray(Coordinate start, double_t angleOfDeparture, const Fiber* fiber)
+        : start(start), angleOfDeparture(angleOfDeparture), fiber(fiber), endHitFiber(false) {
+        //if (!fiber) return;
+        if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
+            this->end.y = fiber->getTopY();
+            this->end.x = this->start.x + (fiber->getTopY() - this->start.y) / std::tan(this->angleOfDeparture);
+        } else if (angleOfDeparture > 3 * M_PI / 4 && angleOfDeparture < 2 * M_PI) {
+            this->end.y = fiber->getBottomY();
+            this->end.x = this->start.x + (fiber->getBottomY() - this->start.y) / std::tan(this->angleOfDeparture); 
+        } else {
+            // On device, don't throw: just mark as invalid
+
+        }
+        if(this->end.x > fiber->getLength()){
+            this->endHitFiber = true;
+            this->end.x = fiber->getLength();
+            this->end.y = std::tan(this->angleOfDeparture) * (fiber->getLength() - this->start.x) + this->start.y;
+        }
+    }
     __host__ __device__ Ray(const Ray& other): 
             start(other.start), end(other.end), fiber(other.fiber),
-            angleOfDeparture(other.angleOfDeparture), direction(other.direction),
+            angleOfDeparture(other.angleOfDeparture),
             endHitFiber(other.endHitFiber) {}
     __host__ __device__ Ray& operator=(const Ray& other) {
         if (this != &other) {
@@ -23,17 +42,12 @@ public:
             end = other.end;
             fiber = other.fiber;
             angleOfDeparture = other.angleOfDeparture;
-            direction = other.direction;
             endHitFiber = other.endHitFiber;
         }
         return *this;
     }
     __host__ __device__ ~Ray() {}
 
-    enum class Direction {
-        UP,
-        DOWN
-    };
 
 private:
     Coordinate start;
@@ -42,7 +56,6 @@ private:
     // const Fiber& fiber;
     const Fiber* fiber;
     double_t angleOfDeparture;
-    Direction direction;
     bool endHitFiber = false;
 
 public:
@@ -55,7 +68,6 @@ public:
     __host__ __device__ inline Coordinate getStart() const { return start; }
     __host__ __device__ inline Coordinate getEnd() const { return end; }
     __host__ __device__ inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
-    __host__ __device__ inline Direction getDirection() const { return direction; }
     __host__ __device__ inline bool getEndHitFiber() const { return endHitFiber; }
     __host__ __device__ inline void setEndHitFiber(bool endHitFiber) { this->endHitFiber = endHitFiber; }
     // CUDA-compatible propagateRay (in-place, returns void)
@@ -73,20 +85,24 @@ public:
         printf("Start: (%f, %f)\n", this->start.x, this->start.y);
         
         printf("Angle of departure: %f\n", this->angleOfDeparture);
+        printf("The fiber: (%f, %f)\n", fiber->getTopY(), fiber->getBottomY());
+        printf("The fiber length: %f\n", fiber->getLength());
 
         if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
             printf("Smaller than 90 degrees\n");
-            this->direction = Direction::UP;
             this->end.y = fiber->getTopY();
             this->end.x = this->start.x + (fiber->getTopY() - this->start.y) / std::tan(this->angleOfDeparture);
+            printf("End: (%f, %f)\n", this->end.x, this->end.y);
         } else if (angleOfDeparture > 3 * M_PI / 4 && angleOfDeparture < 2 * M_PI) {
             printf("Greater than 270 degrees\n");
-            this->direction = Direction::DOWN;
             this->end.y = fiber->getBottomY();
             this->end.x = this->start.x + (fiber->getBottomY() - this->start.y) / std::tan(this->angleOfDeparture); 
+            printf("End: (%f, %f)\n", this->end.x, this->end.y);
         } else {
             printf("DO I PASS HERE?\n");
         }
+
+        
         if(this->end.x > fiber->getLength()){
             this->endHitFiber = true;
             this->end.x = fiber->getLength();

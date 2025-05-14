@@ -92,40 +92,53 @@ void runTraceRayGPU(const Fiber* fiber,int numRays)
 }
 
 
-__global__  void debugRayGPU(const Fiber* fiber, Ray input_ray, Ray* output_rays, int maxBounces)
+__global__  void debugRayGPU(Fiber* fiber, Ray* input_ray, Ray* output_rays, int maxBounces)
 {
     int idx = 0;
 
-    while(!input_ray.getEndHitFiber() && idx< maxBounces)
+    while(!input_ray->getEndHitFiber() && idx< maxBounces)
     {
-        printf("Ray %d: Start (%f, %f), End (%f, %f)\n", idx, input_ray.getStart().x, input_ray.getStart().y, input_ray.getEnd().x, input_ray.getEnd().y);
-        input_ray.propagateRay();
-        output_rays[idx] = input_ray;
+        printf("Passing in main while not hit end ray propagtion\n");
+        input_ray->propagateRay();
+        output_rays[idx] = *input_ray;
         idx++;
     }
 }
 
-void runDebugTraceRayGPU(const Fiber* fiber){
+__global__ void initRay(Ray* d_ray, Coordinate start, double_t angle, const Fiber* fiber) {
+    *d_ray = Ray(start, angle, fiber);
+}
+
+void runDebugTraceRayGPU(Fiber* fiber){
     double_t angleDegrees = 30;
     double_t angleRadians = angleDegrees * (M_PI / 180.0);
 
-    Coordinate startCo = Coordinate(0, 0);
-    Ray ray = Ray(startCo, angleRadians, fiber);
+    // Allocate the fiber on the GPU
+    Fiber* GPU_fiber;
+    cudaMalloc((void**)&GPU_fiber, sizeof(Fiber));
+    cudaMemcpy(GPU_fiber, fiber, sizeof(Fiber), cudaMemcpyHostToDevice);
 
-    int maxBounces = 100; // Set to a reasonable upper limit
+    Coordinate startCo = Coordinate(0, 0);
+    // IMPORTANT: Use GPU_fiber as the pointer!
+    Ray* d_ray;
+    cudaMalloc((void**)&d_ray, sizeof(Ray));
+
+    int maxBounces = 100;
 
     Ray* output_rays;
     cudaMalloc((void**)&output_rays, maxBounces * sizeof(Ray));
 
-    // Launch kernel with 1 thread (since only one ray)
-    debugRayGPU<<<1, 1>>>(fiber, ray, output_rays, maxBounces);
+    initRay<<<1, 1>>>(d_ray, startCo, angleRadians, GPU_fiber);
+    cudaDeviceSynchronize();
+
+    debugRayGPU<<<1, 1>>>(GPU_fiber, d_ray, output_rays, maxBounces);
     cudaDeviceSynchronize();
 
     // Copy results back
     Ray* rays = new Ray[maxBounces];
     cudaMemcpy(rays, output_rays, maxBounces * sizeof(Ray), cudaMemcpyDeviceToHost);
 
-    // Print all intermediate rays
+/*     // Print all intermediate rays
     for (int i = 0; i < maxBounces; ++i) {
         // Stop printing if the ray has hit the fiber end
         if (rays[i].getEndHitFiber() || (i > 0 && rays[i].getStart().x == rays[i].getEnd().x && rays[i].getStart().y == rays[i].getEnd().y)) {
@@ -135,9 +148,10 @@ void runDebugTraceRayGPU(const Fiber* fiber){
         }
         std::cout << "Bounce " << i << ": (" << rays[i].getStart().x << ", " << rays[i].getStart().y << ") -> ("
                   << rays[i].getEnd().x << ", " << rays[i].getEnd().y << ") [endHitFiber=" << rays[i].getEndHitFiber() << "]\n";
-    }
+    } */
 
     cudaFree(output_rays);
+    cudaFree(GPU_fiber);
     delete[] rays;
 }
 
