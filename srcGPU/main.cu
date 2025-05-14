@@ -17,9 +17,9 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
         while (!rays[idx].getEndHitFiber() && bounce < maxbounces) {
             rays[idx] = rays[idx].propagateRay();
             bounce++;
-            if(maxbounces == bounce){
+            /* if(maxbounces == bounce){
                 printf("Hit max bounces\n");
-            }
+            } */
         }
     }
 }
@@ -66,9 +66,9 @@ void runTraceRayGPU(Fiber* fiber,int numRays)
     cudaFree(GPU_fiber);
     
     // print the rays calculated on the GPU
-   /*  for (int i = 0; i < numRays; ++i) {
-        std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y  << "\t\t Angle: " << ray_array[i].getAngleOfDeparture() << std::endl;
-    } */
+    for (int i = 0; i < numRays; ++i) {
+        std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y  <<  std::endl;
+    }
     delete[] ray_array;
 }
 
@@ -161,7 +161,7 @@ int main(){
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
     printf("x,y\n");
 
-    int numRays = 10000000;
+    int numRays = 1000000;
 
     runTraceRayGPU(&fiber, numRays);
 }
