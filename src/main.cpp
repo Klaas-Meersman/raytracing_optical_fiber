@@ -76,7 +76,7 @@ void traceRays(const Fiber &fiber, int numRays)
         rays.push_back(ray);
     }
 
-    const int maxbounces = 10000;
+    const int maxbounces = 1000000;
     // for all rays, propagate until they hit the fiber, then print their end coordinates
     for (const auto &ray : rays)
     {
