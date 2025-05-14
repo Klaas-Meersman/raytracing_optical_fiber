@@ -45,75 +45,73 @@
 
 // To trace multiple rays only to the end of the fiber
 // we generate a 1000 rays and print their coordinates
-void traceRays(const Fiber &fiber, int numRays)
+void traceSingleRay(const Fiber &fiber)
 {
-    std::vector<Ray> rays;
-    double_t angleRadians = 0;
+    Coordinate startCo = Coordinate(0, 0);
 
-    for (int i = 0; i < numRays; ++i)
+    // Gebruik een vaste hoek voor betere visualisatie
+    double_t angleDegrees = 30;
+    double_t angleRadians = angleDegrees / 180 * 3.1415;
+
+    Ray ray = Ray(startCo, angleRadians, fiber);
+
+    while (!ray.getEndHitFiber())
     {
-        double u = static_cast<double>(rand()) / RAND_MAX;
-        double theta = std::asin(u);
-    
-        if (rand() % 2 == 0)
-        {
-            angleRadians = theta;
-        }
-        else
-        {
-            angleRadians = 3 * 3.1415 / 2 + theta;
-        }
-    
-        Coordinate startCo = Coordinate(0, 0);
-        Ray ray = Ray(startCo, angleRadians, fiber);
-        rays.push_back(ray);
+        std::cout << ray.getStart().x << "," << ray.getStart().y << std::endl;
+        ray = ray.propagateRay();
     }
 
-    for (const auto &ray : rays)
+    // Print eindpunt
+    std::cout << ray.getEnd().x << "," << ray.getEnd().y << std::endl;
+}
+
+// Debugging output toevoegen aan traceSingleRay
+void traceDoubleRay(const Fiber &fiber)
+{
+    Coordinate startCo(0, 0);
+
+    // Hoek in graden
+    double angleDegrees = 30;
+    double angleRad1 = angleDegrees / 180.0 * 3.1415;   // positieve hoek
+    double angleRad2 = -angleDegrees / 180.0 * 3.1415;  // negatieve hoek
+
+    Ray ray1(startCo, angleRad1, fiber);
+    Ray ray2(startCo, angleRad2, fiber);
+
+    // Eerst ray1 volgen
+    while (!ray1.getEndHitFiber())
     {
-        Ray currentRay = ray;
-
-        while (!currentRay.getEndHitFiber())
-        {
-            // Genereer pad (de rechte lijn tot botsing)
-            std::vector<Coordinate> path = currentRay.generateStraightPath(0.2);
-            
-            // Toon botsingspunten (eindpunt van elke rechte lijn)
-            for (const auto &coord : path)
-            {
-                std::cout << coord.x << "," << coord.y << std::endl;
-            }
-
-            // Verwerk reflectie
-            currentRay.propagateRay();
-        }
-
-        // Laatste stuk van de ray
-        std::vector<Coordinate> finalPath = currentRay.generateStraightPath(0.2);
-        for (const auto &coord : finalPath)
-        {
-            std::cout << coord.x << "," << coord.y << std::endl;
-        }
+        std::cout << "Ray1 Start: " << ray1.getStart().x << "," << ray1.getStart().y << std::endl;
+        ray1 = ray1.propagateRay();
     }
+    std::cout << "Ray1 End: " << ray1.getEnd().x << "," << ray1.getEnd().y << std::endl;
+
+    // Dan ray2 volgen
+    while (!ray2.getEndHitFiber())
+    {
+        std::cout << "Ray2 Start: " << ray2.getStart().x << "," << ray2.getStart().y << std::endl;
+        ray2 = ray2.propagateRay();
+    }
+    std::cout << "Ray2 End: " << ray2.getEnd().x << "," << ray2.getEnd().y << std::endl;
 }
 
 
-int main()
-{
+int main(){
     double length_fiber = 100;
     double width_fiber = 5;
-    Fiber fiber = Fiber(width_fiber, length_fiber);
+    Fiber fiber(width_fiber, length_fiber);
 
-    // Basisinformatie over de vezel
+    // Metadata
     printf("fiber_length,%f\n", fiber.getLength());
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
 
     // CSV-header
     printf("x,y\n");
 
-    // Aantal teststralen
-    int numRays = 1;
-    traceRays(fiber, numRays);
+    // Dubbele straal volgen
+    //traceDoubleRay(fiber);
+    traceSingleRay(fiber);
+
 
     return 0;
 }
