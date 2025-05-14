@@ -62,8 +62,11 @@ def plot_fiber_and_ray_from_output(output):
     plt.grid(True)
     plt.show()
 
+
+
 if __name__ == "__main__":
     build_dir = 'build'
     binary_name = 'raytracing_optical_fiber'
     output = build_and_run_c_program(build_dir, binary_name)
     plot_fiber_and_ray_from_output(output)
+

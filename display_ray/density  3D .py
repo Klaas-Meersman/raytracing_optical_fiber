@@ -8,6 +8,9 @@ from scipy.stats import gaussian_kde
 import platform
 from matplotlib.colors import LinearSegmentedColormap
 purple_cmap = LinearSegmentedColormap.from_list("white_to_purple", ["white", "purple"])
+import plotly.graph_objects as go
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 def build_and_run_c_program(build_dir, binary_name):
@@ -82,8 +85,54 @@ def plot_yz_density_at_fiber_end(build_dir, binary_name):
     plt.show()
 
 
+def plot_3d_ray_path_in_fiber_plotly(build_dir, binary_name):
+    output = build_and_run_c_program(build_dir, binary_name)
+    fiber_info, ray_df = read_fiber_and_ray_from_string(output)
+
+    # Fiber dimensies en ranges
+    fiber_length = fiber_info['fiber_length']
+    y_min, y_max = fiber_info['fiber_bottom_y'], fiber_info['fiber_top_y']
+    z_min, z_max = fiber_info['fiber_left_z'], fiber_info['fiber_right_z']
+
+    x_range = fiber_length
+    y_range = y_max - y_min
+    z_range = z_max - z_min
+
+    # 3D scatter
+    fig = go.Figure(go.Scatter3d(
+        x=ray_df['x'], y=ray_df['y'], z=ray_df['z'],
+        mode='markers+lines', marker=dict(size=3, color='red'),
+        line=dict(width=1), name='Stralenpad'
+    ))
+
+    # Fiber box (wireframe)
+    for x_fixed in (0, fiber_length):
+        fig.add_trace(go.Mesh3d(
+            x=[x_fixed]*4,
+            y=[y_min, y_max, y_max, y_min],
+            z=[z_min, z_min, z_max, z_max],
+            opacity=0.1, color='cyan', name='Fibervlak'
+        ))
+
+    # Stel de scene_aspectratio in op de werkelijke verhoudingen
+    fig.update_layout(
+        scene=dict(
+            xaxis=dict(range=[0, fiber_length], title='X'),
+            yaxis=dict(range=[y_min, y_max], title='Y'),
+            zaxis=dict(range=[z_min, z_max], title='Z'),
+            aspectmode='manual',
+            aspectratio=dict(
+                x=abs(x_range),  # Zorg ervoor dat de waarde positief is
+                y=abs(y_range),  # Zorg ervoor dat de waarde positief is
+                z=abs(z_range)   # Zorg ervoor dat de waarde positief is
+            )
+        ),
+    title='3D reflectiepunten in fiber (Plotly)'
+    )
+    fig.show()
 # Pas aan naargelang je build directory
 build_dir = 'build'
 binary_name = 'raytracing_optical_fiber'
 
-plot_yz_density_at_fiber_end(build_dir, binary_name)
+#plot_yz_density_at_fiber_end(build_dir, binary_name)
+plot_3d_ray_path_in_fiber_plotly(build_dir, binary_name)
