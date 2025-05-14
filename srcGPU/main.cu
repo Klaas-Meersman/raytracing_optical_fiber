@@ -98,7 +98,7 @@ __global__  void debugRayGPU(Fiber* fiber, Ray* input_ray, Ray* output_rays, int
 
     while(!input_ray->getEndHitFiber() && idx< maxBounces)
     {
-        printf("Passing in main while not hit end ray propagtion\n");
+        //printf("Passing in main while not hit end ray propagtion\n");
         input_ray->propagateRay();
         output_rays[idx] = *input_ray;
         idx++;
@@ -138,17 +138,18 @@ void runDebugTraceRayGPU(Fiber* fiber){
     Ray* rays = new Ray[maxBounces];
     cudaMemcpy(rays, output_rays, maxBounces * sizeof(Ray), cudaMemcpyDeviceToHost);
 
-/*     // Print all intermediate rays
+    std::cout << rays[0].getStart().x << ", " << rays[0].getStart().y << std::endl;
+
     for (int i = 0; i < maxBounces; ++i) {
         // Stop printing if the ray has hit the fiber end
         if (rays[i].getEndHitFiber() || (i > 0 && rays[i].getStart().x == rays[i].getEnd().x && rays[i].getStart().y == rays[i].getEnd().y)) {
-            std::cout << "Bounce " << i << ": (" << rays[i].getStart().x << ", " << rays[i].getStart().y << ") -> ("
-                      << rays[i].getEnd().x << ", " << rays[i].getEnd().y << ") [endHitFiber=" << rays[i].getEndHitFiber() << "]\n";
+            std::cout << rays[i].getEnd().x << ", " << rays[i].getEnd().y << std::endl;
             break;
         }
-        std::cout << "Bounce " << i << ": (" << rays[i].getStart().x << ", " << rays[i].getStart().y << ") -> ("
-                  << rays[i].getEnd().x << ", " << rays[i].getEnd().y << ") [endHitFiber=" << rays[i].getEndHitFiber() << "]\n";
-    } */
+        std::cout << rays[i].getEnd().x << ", " << rays[i].getEnd().y << std::endl;
+    }
+
+    //
 
     cudaFree(output_rays);
     cudaFree(GPU_fiber);

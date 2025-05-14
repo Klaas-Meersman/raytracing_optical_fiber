@@ -15,7 +15,6 @@ public:
     // Constructor with Fiber pointer
     __host__ __device__ Ray(Coordinate start, double_t angleOfDeparture, const Fiber* fiber)
         : start(start), angleOfDeparture(angleOfDeparture), fiber(fiber), endHitFiber(false) {
-        //if (!fiber) return;
         if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
             this->end.y = fiber->getTopY();
             this->end.x = this->start.x + (fiber->getTopY() - this->start.y) / std::tan(this->angleOfDeparture);
@@ -24,7 +23,6 @@ public:
             this->end.x = this->start.x + (fiber->getBottomY() - this->start.y) / std::tan(this->angleOfDeparture); 
         } else {
             // On device, don't throw: just mark as invalid
-
         }
         if(this->end.x > fiber->getLength()){
             this->endHitFiber = true;
@@ -52,19 +50,11 @@ public:
 private:
     Coordinate start;
     Coordinate end;
-    // For device code, avoid references. Use a pointer or value.
-    // const Fiber& fiber;
     const Fiber* fiber;
     double_t angleOfDeparture;
     bool endHitFiber = false;
 
 public:
-    // Remove std::vector from device code, or provide host-only alternatives.
-    // __host__ std::vector<Coordinate> generateStraightPath(double dx);
-    // __host__ Ray generateBounceRay(const Fiber& fiber);
-
-    //__host__ __device__ void propagateRay();
-
     __host__ __device__ inline Coordinate getStart() const { return start; }
     __host__ __device__ inline Coordinate getEnd() const { return end; }
     __host__ __device__ inline double_t getAngleOfDeparture() const { return angleOfDeparture; }
@@ -72,47 +62,25 @@ public:
     __host__ __device__ inline void setEndHitFiber(bool endHitFiber) { this->endHitFiber = endHitFiber; }
     // CUDA-compatible propagateRay (in-place, returns void)
     __host__ __device__ inline Ray propagateRay() {
-        printf("Propagating ray...\n");
-        printf("Start: (%f, %f)\n", this->start.x, this->start.y);
-        printf("End: (%f, %f)\n", this->end.x, this->end.y);
-        printf("Angle of departure: %f\n", this->angleOfDeparture);
-        printf("Do I still get here?\n");
-
         this->start.x = this->end.x;
         this->start.y = this->end.y;
         this->angleOfDeparture = M_PI*2 - this->angleOfDeparture;
 
-        printf("Start: (%f, %f)\n", this->start.x, this->start.y);
-        
-        printf("Angle of departure: %f\n", this->angleOfDeparture);
-        printf("The fiber: (%f, %f)\n", fiber->getTopY(), fiber->getBottomY());
-        printf("The fiber length: %f\n", fiber->getLength());
-
         if (angleOfDeparture > 0 && angleOfDeparture < M_PI / 2) {
-            printf("Smaller than 90 degrees\n");
             this->end.y = fiber->getTopY();
             this->end.x = this->start.x + (fiber->getTopY() - this->start.y) / std::tan(this->angleOfDeparture);
-            printf("End: (%f, %f)\n", this->end.x, this->end.y);
         } else if (angleOfDeparture > 3 * M_PI / 4 && angleOfDeparture < 2 * M_PI) {
-            printf("Greater than 270 degrees\n");
             this->end.y = fiber->getBottomY();
             this->end.x = this->start.x + (fiber->getBottomY() - this->start.y) / std::tan(this->angleOfDeparture); 
-            printf("End: (%f, %f)\n", this->end.x, this->end.y);
         } else {
-            printf("DO I PASS HERE?\n");
+            printf("DO I PASS HERE? I shouldn't\n");
         }
 
-        
         if(this->end.x > fiber->getLength()){
             this->endHitFiber = true;
             this->end.x = fiber->getLength();
             this->end.y = std::tan(this->angleOfDeparture) * (fiber->getLength() - this->start.x) + this->start.y;
         }
-
-        printf("End: (%f, %f)\n", this->end.x, this->end.y);
         return *this;
     }
-
-    // Remove stream operator for device code
-    // friend std::ostream& operator<<(std::ostream& os, const Ray& r);
 };
