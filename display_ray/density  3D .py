@@ -85,36 +85,55 @@ def plot_yz_density_at_fiber_end(build_dir, binary_name):
     plt.show()
 
 
-def plot_3d_ray_path_in_fiber_plotly(build_dir, binary_name):
+
+def plot_3d_ray_path_in_fiber_plotly_with_edges(build_dir, binary_name):
+
+
+
+
     output = build_and_run_c_program(build_dir, binary_name)
     fiber_info, ray_df = read_fiber_and_ray_from_string(output)
 
-    # Fiber dimensies en ranges
+    # Fiber dimensies
     fiber_length = fiber_info['fiber_length']
     y_min, y_max = fiber_info['fiber_bottom_y'], fiber_info['fiber_top_y']
-    z_min, z_max = fiber_info['fiber_left_z'], fiber_info['fiber_right_z']
+    z_min, z_max = fiber_info['fiber_right_z'], fiber_info['fiber_left_z']
 
-    x_range = fiber_length
-    y_range = y_max - y_min
-    z_range = z_max - z_min
+    # 3D Plot
+    fig = go.Figure()
 
-    # 3D scatter
-    fig = go.Figure(go.Scatter3d(
+    # Reflectiepunten
+    fig.add_trace(go.Scatter3d(
         x=ray_df['x'], y=ray_df['y'], z=ray_df['z'],
-        mode='markers+lines', marker=dict(size=3, color='red'),
-        line=dict(width=1), name='Stralenpad'
+        mode='markers+lines', line=dict(color='red', width=1),
+        marker=dict(size=3), name='Stralenpad'
     ))
 
-    # Fiber box (wireframe)
-    for x_fixed in (0, fiber_length):
-        fig.add_trace(go.Mesh3d(
-            x=[x_fixed]*4,
-            y=[y_min, y_max, y_max, y_min],
-            z=[z_min, z_min, z_max, z_max],
-            opacity=0.1, color='cyan', name='Fibervlak'
+    # Voeg 12 zwarte lijnen toe om de buitenranden van de fiber te tekenen
+    # Definieer de hoeken van de kubus:
+    corners = np.array([
+        [0, y_min, z_min], [0, y_min, z_max], [0, y_max, z_min], [0, y_max, z_max],
+        [fiber_length, y_min, z_min], [fiber_length, y_min, z_max], [fiber_length, y_max, z_min], [fiber_length, y_max, z_max]
+    ])
+
+    # Maak de lijnen voor de buitenste randen (12 lijnen in totaal)
+    edges = [
+        [0, 1], [1, 3], [3, 2], [2, 0],  # Onderkant
+        [4, 5], [5, 7], [7, 6], [6, 4],  # Bovenkant
+        [0, 4], [1, 5], [2, 6], [3, 7]   # Verbindingen tussen boven- en onderkant
+    ]
+
+    # Voeg de lijnen toe aan de plot
+    for edge in edges:
+        x_vals = [corners[edge[0]][0], corners[edge[1]][0]]
+        y_vals = [corners[edge[0]][1], corners[edge[1]][1]]
+        z_vals = [corners[edge[0]][2], corners[edge[1]][2]]
+        fig.add_trace(go.Scatter3d(
+            x=x_vals, y=y_vals, z=z_vals,
+            mode='lines', line=dict(color='black', width=4)
         ))
 
-    # Stel de scene_aspectratio in op de werkelijke verhoudingen
+    # Pas de layout aan
     fig.update_layout(
         scene=dict(
             xaxis=dict(range=[0, fiber_length], title='X'),
@@ -122,17 +141,21 @@ def plot_3d_ray_path_in_fiber_plotly(build_dir, binary_name):
             zaxis=dict(range=[z_min, z_max], title='Z'),
             aspectmode='manual',
             aspectratio=dict(
-                x=abs(x_range),  # Zorg ervoor dat de waarde positief is
-                y=abs(y_range),  # Zorg ervoor dat de waarde positief is
-                z=abs(z_range)   # Zorg ervoor dat de waarde positief is
+                x=abs(fiber_length), 
+                y=abs(y_max - y_min), 
+                z=abs(z_max - z_min)
             )
         ),
-    title='3D reflectiepunten in fiber (Plotly)'
+        title='3D reflectiepunten in fiber met zwarte randen'
     )
+
     fig.show()
+
+
+    
 # Pas aan naargelang je build directory
 build_dir = 'build'
 binary_name = 'raytracing_optical_fiber'
 
 #plot_yz_density_at_fiber_end(build_dir, binary_name)
-plot_3d_ray_path_in_fiber_plotly(build_dir, binary_name)
+plot_3d_ray_path_in_fiber_plotly_with_edges(build_dir, binary_name)
