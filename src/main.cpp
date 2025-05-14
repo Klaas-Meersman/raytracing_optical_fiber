@@ -47,71 +47,43 @@
 // we generate a 1000 rays and print their coordinates
 void traceSingleRay(const Fiber &fiber)
 {
-    Coordinate startCo = Coordinate(0, 0);
+    Coordinate startCo = Coordinate(0, 0, 0);
 
     // Gebruik een vaste hoek voor betere visualisatie
     double_t angleDegrees = 30;
-    double_t angleRadians = angleDegrees / 180 * 3.1415;
+    double_t azimuth = angleDegrees / 180.0 * 3.1415;   // Hoek in de XZ-vlak
+    double_t elevation = 20.0 / 180.0 * 3.1415;         // Hoek in de YZ-vlak
 
-    Ray ray = Ray(startCo, angleRadians, fiber);
+    Ray ray(startCo, azimuth, elevation, fiber);
 
+    // Gebruik de juiste output voor 3D coördinaten
     while (!ray.getEndHitFiber())
     {
-        std::cout << ray.getStart().x << "," << ray.getStart().y << std::endl;
+        std::cout << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
         ray = ray.propagateRay();
     }
-
-    // Print eindpunt
-    std::cout << ray.getEnd().x << "," << ray.getEnd().y << std::endl;
-}
-
-// Debugging output toevoegen aan traceSingleRay
-void traceDoubleRay(const Fiber &fiber)
-{
-    Coordinate startCo(0, 0);
-
-    // Hoek in graden
-    double angleDegrees = 30;
-    double angleRad1 = angleDegrees / 180.0 * 3.1415;   // positieve hoek
-    double angleRad2 = -angleDegrees / 180.0 * 3.1415;  // negatieve hoek
-
-    Ray ray1(startCo, angleRad1, fiber);
-    Ray ray2(startCo, angleRad2, fiber);
-
-    // Eerst ray1 volgen
-    while (!ray1.getEndHitFiber())
-    {
-        std::cout << "Ray1 Start: " << ray1.getStart().x << "," << ray1.getStart().y << std::endl;
-        ray1 = ray1.propagateRay();
-    }
-    std::cout << "Ray1 End: " << ray1.getEnd().x << "," << ray1.getEnd().y << std::endl;
-
-    // Dan ray2 volgen
-    while (!ray2.getEndHitFiber())
-    {
-        std::cout << "Ray2 Start: " << ray2.getStart().x << "," << ray2.getStart().y << std::endl;
-        ray2 = ray2.propagateRay();
-    }
-    std::cout << "Ray2 End: " << ray2.getEnd().x << "," << ray2.getEnd().y << std::endl;
+    // Print het eindpunt
+    std::cout << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
 }
 
 
 int main(){
     double length_fiber = 100;
     double width_fiber = 5;
-    Fiber fiber(width_fiber, length_fiber);
+    double height_fiber = 5;  // Nieuw toegevoegd voor de Z-dimensie
+
+    Fiber fiber(width_fiber, height_fiber, length_fiber);
 
     // Metadata
     printf("fiber_length,%f\n", fiber.getLength());
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
+    printf("fiber_left_z,%f\nfiber_right_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
 
     // CSV-header
-    printf("x,y\n");
+    printf("x,y,z\n");
 
-    // Dubbele straal volgen
-    //traceDoubleRay(fiber);
+    // Traceer de straal in 3D
     traceSingleRay(fiber);
-
 
     return 0;
 }

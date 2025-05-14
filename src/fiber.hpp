@@ -1,29 +1,27 @@
+// fiber.hpp
 #ifndef FIBER_HPP
 #define FIBER_HPP
 
 #include <vector>
 #include "coordinate.hpp"
 
-
-class Fiber
-{
+class Fiber {
 private:
-    const double_t width, length;
+    const double_t width;
+    const double_t height;
+    const double_t length;
+
 public:
-    Fiber(double_t width, double_t length);
+    Fiber(double_t width, double_t height, double_t length);
     Fiber(const Fiber& other);
     Fiber& operator=(const Fiber& other);
     ~Fiber();
 
-    inline double_t getTopY() const{
-        return width/2;
-    }
-    inline double_t getBottomY()const {
-        return -width/2;
-    }
-    inline double_t getWidth() const { return width; }
-    inline double_t getLength() const { return length; }
-
+    [[nodiscard]] double_t getLength() const { return length; }
+    [[nodiscard]] double_t getTopY() const { return height / 2.0; }
+    [[nodiscard]] double_t getBottomY() const { return -height / 2.0; }
+    [[nodiscard]] double_t getTopZ() const { return width / 2.0; }
+    [[nodiscard]] double_t getBottomZ() const { return -width / 2.0; }
 };
 
-#endif
+#endif // FIBER_HPP

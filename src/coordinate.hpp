@@ -1,42 +1,36 @@
+// coordinate.hpp
 #ifndef COORDINATE_HPP
 #define COORDINATE_HPP
 
-#include <cmath> // For sqrt in the distance function
+#include <cmath>
 #include <ostream>
 
 struct Coordinate {
-    // Public members for simple data
     double_t x = 0;
     double_t y = 0;
+    double_t z = 0;
 
-    // Constructors
     constexpr Coordinate() = default;
-    constexpr Coordinate(double_t x, double_t y) noexcept : x(x), y(y) {}
+    constexpr Coordinate(double_t x, double_t y, double_t z = 0) noexcept : x(x), y(y), z(z) {}
 
-    // Optional: Useful operators defined inline
     constexpr Coordinate operator+(const Coordinate& other) const noexcept {
-        return {x + other.x, y + other.y};
+        return {x + other.x, y + other.y, z + other.z};
     }
 
     constexpr Coordinate operator-(const Coordinate& other) const noexcept {
-        return {x - other.x, y - other.y};
+        return {x - other.x, y - other.y, z - other.z};
     }
 
-    // Optional: Method declared here but defined in cpp file
-    // (only if it's complex and would clutter the header)
-    [[nodiscard]] double distance(const Coordinate& other) const noexcept;
+    [[nodiscard]] double distance(const Coordinate& other) const noexcept {
+        double dx = x - other.x;
+        double dy = y - other.y;
+        double dz = z - other.z;
+        return std::sqrt(dx * dx + dy * dy + dz * dz);
+    }
 };
 
-// Small inline functions can be defined directly in the header
-inline double Coordinate::distance(const Coordinate& other) const noexcept {
-    const double_t dx = x - other.x;
-    const double_t dy = y - other.y;
-    return std::sqrt(dx*dx + dy*dy);
-}
-
-//tostring
 inline std::ostream& operator<<(std::ostream& os, const Coordinate& c) {
-    os << c.x << "," << c.y;
+    os << c.x << "," << c.y << "," << c.z;
     return os;
 }
 

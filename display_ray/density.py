@@ -42,10 +42,34 @@ def read_fiber_and_ray_from_string(csv_string):
 def plot_density_from_c_output(build_dir, binary_name):
     # Get output from C++ binary
     output = build_and_run_c_program(build_dir, binary_name)
-    
+
+    print("📤 Output van C++ programma:\n")
+    print(output)
+
     # Parse the output
     fiber_info, ray_df = read_fiber_and_ray_from_string(output)
-    y_values = ray_df['y'].values
+
+    # Alleen y-waarden waar x gelijk is aan de fiber_length
+    eind_y_df = ray_df[np.isclose(ray_df['x'], fiber_info['fiber_length'], rtol=1e-3)]
+    y_values = eind_y_df['y'].values
+    if len(y_values) < 2:
+        print("⚠️ Te weinig eindpunten, dupliceren met kleine jitter voor KDE...")
+        y_values = np.tile(y_values, 10)  # 10 keer kopiëren
+        y_values = y_values + np.random.normal(0, 0.02, size=y_values.shape)
+    # Debug prints
+    print("🧵 Fiber informatie:")
+    for k, v in fiber_info.items():
+        print(f"  {k}: {v}")
+
+    print("\n🔍 Laatste ray-punten (x ≈ fiber_length):")
+    print(eind_y_df)
+
+    print(f"\n📊 Statistieken over y-waarden aan einde:")
+    print(f"  Aantal stralen: {len(y_values)}")
+    print(f"  Min y: {np.min(y_values)}")
+    print(f"  Max y: {np.max(y_values)}")
+    print(f"  Gemiddelde y: {np.mean(y_values)}")
+    print(f"  Mediaan y: {np.median(y_values)}")
 
     # KDE density estimate
     kde = gaussian_kde(y_values)
