@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 import platform
+import matplotlib.cm as cm
+import numpy as np
 
 
 def build_and_run_c_program(build_dir, binary_name):
@@ -31,15 +33,24 @@ def read_fiber_and_ray_from_string(csv_string):
     lines = csv_string.strip().splitlines()
     fiber_info = {}
     ray_start_idx = 0
+
     for i, line in enumerate(lines):
-        if line.strip().startswith('x'):
+        if line.strip().startswith('id'):
             ray_start_idx = i
             break
-        key, value = line.strip().split(',')
-        fiber_info[key] = float(value)
+        try:
+            key, value = line.strip().split(',')
+            fiber_info[key] = float(value)
+        except ValueError:
+            # Als er te veel waarden zijn, is het waarschijnlijk al ray-data
+            ray_start_idx = i
+            break
+
     ray_data_str = '\n'.join(lines[ray_start_idx:])
     ray_df = pd.read_csv(io.StringIO(ray_data_str))
     return fiber_info, ray_df
+
+
 
 def plot_fiber_and_ray_from_output(output):
     print("----- Raw program output -----")
@@ -50,18 +61,30 @@ def plot_fiber_and_ray_from_output(output):
     fiber_top_y = fiber_info['fiber_top_y']
     fiber_bottom_y = fiber_info['fiber_bottom_y']
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 7))
+
+    # Plot fiber boundaries
     plt.plot([0, fiber_length], [fiber_top_y, fiber_top_y], 'r-', label='Fiber Top')
     plt.plot([0, fiber_length], [fiber_bottom_y, fiber_bottom_y], 'r-', label='Fiber Bottom')
     plt.axvline(x=fiber_length, color='g', linestyle='--', label='Fiber End')
-    plt.plot(ray_df['x'], ray_df['y'], 'b-o', label='Ray')
+
+    # Assign colors
+    ray_ids = ray_df['id'].unique()
+    num_rays = len(ray_ids)
+    colormap = cm.get_cmap('tab20', num_rays)
+
+    for idx, ray_id in enumerate(ray_ids):
+        ray_segment = ray_df[ray_df['id'] == ray_id]
+        color = colormap(idx)
+        plt.plot(ray_segment['x'], ray_segment['y'], '-o', label=f'Ray {ray_id}', color=color)
 
     plt.xlabel('X')
     plt.ylabel('Y')
-    plt.legend()
+    plt.title('Optical Fiber Rays')
+    plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
     plt.grid(True)
+    plt.tight_layout()
     plt.show()
-
 
 
 if __name__ == "__main__":
@@ -69,4 +92,3 @@ if __name__ == "__main__":
     binary_name = 'raytracing_optical_fiber'
     output = build_and_run_c_program(build_dir, binary_name)
     plot_fiber_and_ray_from_output(output)
-

@@ -5,72 +5,67 @@
 #include <numbers>
 #include "coordinate.hpp"
 #include "ray.hpp"
+#include <random>
 
-// //* To trace one ray
-// void traceRay(const Ray& initialRay, const Fiber& fiber) {
-//     Ray ray = initialRay;
-//     while (!ray.getEndHitFiber()) {
-//         std::vector<Coordinate> path = ray.generateStraightPath(0.2);
-//         for (const auto& coord : path) {
-//             std::cout << coord << std::endl;
-//         }
-//         //ray = ray.generateBounceRay(fiber);
-//         ray.propagateRay();
-//     }
-//     // Process and display the last ray's path
-//     std::vector<Coordinate> finalPath = ray.generateStraightPath(0.2);
-//     for (const auto& coord : finalPath) {
-//         std::cout << coord << std::endl;
-//     }
-// }
-
-// int main(){
-//     double length_fiber = 100;
-//     double width_fiber = 5;
-//     Fiber fiber = Fiber(width_fiber, length_fiber);
-//     printf("fiber_length,%f\n", fiber.getLength());
-//     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
-
-//     printf("x,y\n");
-
-//     Coordinate startCo = Coordinate(0, 0);
-//     double_t angleDegrees = 30;
-//     double_t angleRadians = angleDegrees / 180 * std::numbers::pi;
-
-//     Ray initialRay = Ray(startCo, angleRadians, fiber);
-//     traceRay(initialRay, fiber);
-//     return 0;
-// }
-// //*
-
-// To trace multiple rays only to the end of the fiber
-// we generate a 1000 rays and print their coordinates
-void traceSingleRay(const Fiber &fiber)
-{
-    Coordinate startCo = Coordinate(0, 0, 0);
-
-    // Gebruik een vaste hoek voor betere visualisatie
-    double_t angleDegrees = 30;
-    double_t azimuth = angleDegrees / 180.0 * 3.1415;   // Hoek in de XZ-vlak
-    double_t elevation = 20.0 / 180.0 * 3.1415;         // Hoek in de YZ-vlak
-
+void traceSingleRayWithID(const Fiber &fiber, int rayID, double azimuth, double elevation) {
+    Coordinate startCo(0, 0, 0);
     Ray ray(startCo, azimuth, elevation, fiber);
 
-    // Gebruik de juiste output voor 3D coördinaten
-    while (!ray.getEndHitFiber())
-    {
-        std::cout << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
+    while (!ray.getEndHitFiber()) {
+        std::cout << rayID << "," << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
         ray = ray.propagateRay();
     }
-    // Print het eindpunt
-    std::cout << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
+    // Output the end point
+    std::cout << rayID << "," << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
+}
+
+
+void traceMultipleRaysRandom(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<> azimuthDist(-maxAzimuthDeg, maxAzimuthDeg);
+    std::uniform_real_distribution<> elevationDist(-maxElevationDeg, maxElevationDeg);
+
+    for (int i = 0; i < numRays; ++i) {
+        double azimuth = azimuthDist(gen) / 180.0 * 3.1415;
+        double elevation = elevationDist(gen) / 180.0 * 3.1415;
+        traceSingleRayWithID(fiber, i, azimuth, elevation);
+    }
+}
+
+void traceMultipleRaysSegmented(const Fiber &fiber, int totalRays, double maxAzimuthDeg, double maxElevationDeg) {
+    // Benadering: probeer een rooster van sqrt(N) x sqrt(N)
+    int elevationSteps = static_cast<int>(std::sqrt(totalRays));
+    int azimuthSteps = (totalRays + elevationSteps - 1) / elevationSteps;  // afronden naar boven
+
+    int rayID = 0;
+
+    double azimuthMin = -maxAzimuthDeg;
+    double elevationMin = -maxElevationDeg;
+    double azimuthStep = (2 * maxAzimuthDeg) / std::max(1, azimuthSteps - 1);
+    double elevationStep = (2 * maxElevationDeg) / std::max(1, elevationSteps - 1);
+
+    for (int i = 0; i < azimuthSteps; ++i) {
+        double azimuthDeg = azimuthMin + i * azimuthStep;
+        for (int j = 0; j < elevationSteps; ++j) {
+            if (rayID >= totalRays) break;  // stop zodra het juiste aantal is bereikt
+
+            double elevationDeg = elevationMin + j * elevationStep;
+
+            double azimuthRad = azimuthDeg * 3.1415 / 180.0;
+            double elevationRad = elevationDeg * 3.1415 / 180.0;
+
+            traceSingleRayWithID(fiber, rayID++, azimuthRad, elevationRad);
+        }
+    }
 }
 
 
 int main(){
     double length_fiber = 100;
     double width_fiber = 5;
-    double height_fiber = 5;  // Nieuw toegevoegd voor de Z-dimensie
+    double height_fiber = 5;  
 
     Fiber fiber(width_fiber, height_fiber, length_fiber);
 
@@ -80,10 +75,14 @@ int main(){
     printf("fiber_left_z,%f\nfiber_right_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
 
     // CSV-header
-    printf("x,y,z\n");
+    std::cout << "id,x,y,z\n";
 
-    // Traceer de straal in 3D
-    traceSingleRay(fiber);
+    int aantalRays = 100;
+    double maxAzimuth = 30;   // in degrees
+    double maxElevation = 1.0; // in degrees
+    //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
+
+    traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);
 
     return 0;
 }
