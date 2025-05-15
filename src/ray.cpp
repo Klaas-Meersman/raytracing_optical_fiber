@@ -6,12 +6,12 @@
 
 
 Ray::Ray()
-    : start(0, 0), end(0, 0), azimuth(0), elevation(0), fiber(Fiber(1, 1,1)), direction1(Direction1::UP),direction2(Direction2::IN),endHitFiber(false) {
+    : start(0, 0), end(0, 0), azimuth(0), elevation(0), fiber(Fiber(1, 1,1)), endHitFiber(false) {
 }
 
 Ray::Ray(const Ray& other)
     : start(other.start), end(other.end), azimuth(other.azimuth), elevation(other.elevation),
-      fiber(other.fiber), direction1(other.direction1), direction2(other.direction2), endHitFiber(other.endHitFiber) {
+      fiber(other.fiber), endHitFiber(other.endHitFiber) {
 }
 
 Ray& Ray::operator=(const Ray& other) {
@@ -21,8 +21,6 @@ Ray& Ray::operator=(const Ray& other) {
         azimuth = other.azimuth;
         elevation = other.elevation;
         fiber = other.fiber; 
-        direction1 = other.direction1;
-        direction2 = other.direction2;
         endHitFiber = other.endHitFiber;
     }
     return *this;
