@@ -77,9 +77,9 @@ int main(){
     // CSV-header
     std::cout << "id,x,y,z\n";
 
-    int aantalRays = 100;
-    double maxAzimuth = 30;   // in degrees
-    double maxElevation = 1.0; // in degrees
+    int aantalRays = 20;
+    double maxAzimuth = 45;   // in degrees
+    double maxElevation = 45; // in degrees
     //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
 
     traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);

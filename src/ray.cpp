@@ -30,9 +30,6 @@ Ray& Ray::operator=(const Ray& other) {
 Ray::~Ray(){
 }
 
-
-
-
 Ray::Ray(Coordinate start, double_t azimuth, double_t elevation, const Fiber &fiber)
     : start(start), azimuth(azimuth), elevation(elevation), fiber(fiber), endHitFiber(false) {
     
