@@ -6,17 +6,18 @@
 #include "coordinate.hpp"
 #include "ray.hpp"
 #include <random>
+#include <chrono>
 
 void traceSingleRayWithID(const Fiber &fiber, int rayID, double azimuth, double elevation) {
     Coordinate startCo(0, 0, 0);
     Ray ray(startCo, azimuth, elevation, fiber);
 
     while (!ray.getEndHitFiber()) {
-        std::cout << rayID << "," << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
+        //std::cout << rayID << "," << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
         ray = ray.propagateRay();
     }
     // Output the end point
-    std::cout << rayID << "," << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
+    //std::cout << rayID << "," << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
 }
 
 
@@ -109,13 +110,21 @@ int main(){
     // CSV-header
     std::cout << "id,x,y,z\n";
 
-    int aantalRays = 1000;
+    int aantalRays = 1000000;
     double maxAzimuth = 60;   // in degrees
     double maxElevation = 60; // in degrees
     //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
 
     //traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);
+    
+
+    auto start = std::chrono::steady_clock::now();
+
     traceLed(fiber,aantalRays,maxAzimuth,maxElevation);
+
+    auto end = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Elapsed time: " << elapsed << " ms\n";
 
     return 0;
 }
