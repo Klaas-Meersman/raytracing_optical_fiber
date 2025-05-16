@@ -1,3 +1,3 @@
-C:/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber/build/CMakeFiles/raytracing_optical_fiber.dir
-C:/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Gebruiker/OneDrive - KU Leuven/Documents/GitHub/raytracing_optical_fiber/build/CMakeFiles/ZERO_CHECK.dir
+/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles/raytracing_optical_fiber.dir
+/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles/edit_cache.dir
+/home/nvidiasystem/Documenten/raytracing_optical_fiber/build/CMakeFiles/rebuild_cache.dir

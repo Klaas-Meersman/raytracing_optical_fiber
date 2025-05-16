@@ -3,7 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include <string>
-
+#include <algorithm>
 
 Ray::Ray()
     : start(0, 0), end(0, 0), azimuth(0), elevation(0), fiber(Fiber(1, 1,1)), endHitFiber(false) {

@@ -16,16 +16,10 @@ from matplotlib.colors import LinearSegmentedColormap
 
 
 def build_and_run_c_program(build_dir, binary_name):
-    if platform.system() == "Windows":
-        binary_name += '.exe'
-        binary_path = os.path.join(build_dir, "Debug", binary_name)
-    else:
-        binary_path = os.path.join(build_dir, binary_name)
-
-    if not os.path.isfile(binary_path):
-        raise FileNotFoundError(f"Binary not found at: {binary_path}")
-    
-    print(f"Running binary: {binary_path}")
+    # Run cmake, make, and the binary, capturing its output as a string
+    subprocess.run(['cmake', '..'], cwd=build_dir, check=True)
+    subprocess.run(['make'], cwd=build_dir, check=True)
+    binary_path = os.path.join(build_dir, binary_name)
     result = subprocess.run([binary_path], stdout=subprocess.PIPE, text=True, check=True)
     return result.stdout
 
