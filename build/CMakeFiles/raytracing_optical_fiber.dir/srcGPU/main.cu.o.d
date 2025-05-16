@@ -1,4 +1,4 @@
-CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o : /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/main.cu \
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o : /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu \
     /usr/include/stdc-predef.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/cuda_runtime.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/crt/host_config.h \
@@ -287,9 +287,9 @@ CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o : /home/nvidiasystem/Do
     /usr/include/c++/14/bits/ostream.tcc \
     /usr/include/c++/14/istream \
     /usr/include/c++/14/bits/istream.tcc \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/coordinate.hpp \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/ray.hpp \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/fiber.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.hpp \
     /usr/include/c++/14/chrono \
     /usr/include/c++/14/bits/chrono.h \
     /usr/include/c++/14/ratio \

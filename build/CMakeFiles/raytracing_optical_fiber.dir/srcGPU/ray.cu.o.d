@@ -1,4 +1,4 @@
-CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o : /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/ray.cu \
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o : /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.cu \
     /usr/include/stdc-predef.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/cuda_runtime.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/crt/host_config.h \
@@ -191,9 +191,9 @@ CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o : /home/nvidiasystem/Dow
     /usr/include/c++/14/utility \
     /usr/include/c++/14/bits/stl_relops.h \
     /usr/include/c++/14/initializer_list \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/ray.hpp \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/coordinate.hpp \
-    /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/fiber.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/ray.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.hpp \
+    /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/fiber.hpp \
     /usr/include/c++/14/ostream \
     /usr/include/c++/14/ios \
     /usr/include/c++/14/iosfwd \

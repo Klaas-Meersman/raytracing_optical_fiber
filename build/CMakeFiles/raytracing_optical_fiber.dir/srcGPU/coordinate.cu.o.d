@@ -1,4 +1,4 @@
-CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o : /home/nvidiasystem/Downloads/raytracing_optical_fiber/srcGPU/coordinate.cu \
+CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o : /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/coordinate.cu \
     /usr/include/stdc-predef.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/cuda_runtime.h \
     /usr/local/cuda/bin/../targets/x86_64-linux/include/crt/host_config.h \

@@ -198,7 +198,7 @@ int main(){
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
     printf("x,y\n");
 
-    int numRays = 100000000;
+    int numRays = 1000000;
 
     auto start = std::chrono::steady_clock::now();
 
