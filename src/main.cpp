@@ -60,6 +60,38 @@ void traceMultipleRaysSegmented(const Fiber &fiber, int totalRays, double maxAzi
         }
     }
 }
+void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
+    if (numRays < 20) numRays = 20;
+
+    int elevationSteps = static_cast<int>(std::sqrt(numRays));
+    int azimuthSteps = (numRays + elevationSteps - 1) / elevationSteps;
+
+    int rayID = 0;
+
+    double gamma = 3; // exponent voor verdeling — hoe hoger, hoe dichter bij 0
+
+    auto generateNonlinearSteps = [&](int steps, double maxDeg) -> std::vector<double> {
+        std::vector<double> angles;
+        for (int i = 0; i < steps; ++i) {
+            double t = static_cast<double>(i) / (steps - 1);   // 0 .. 1
+            double x = 2 * t - 1;                              // -1 .. 1
+            double curved = x * std::pow(std::abs(x), gamma); // meer punten rond 0
+            double angle = curved * maxDeg;                   // -maxDeg .. maxDeg
+            angles.push_back(angle * 3.1415 / 180.0);           // graden naar radialen
+        }
+        return angles;
+    };
+
+    std::vector<double> azimuthAngles = generateNonlinearSteps(azimuthSteps, maxAzimuthDeg);
+    std::vector<double> elevationAngles = generateNonlinearSteps(elevationSteps, maxElevationDeg);
+
+    for (double elevation : elevationAngles) {
+        for (double azimuth : azimuthAngles) {
+            if (rayID >= numRays) break;
+            traceSingleRayWithID(fiber, rayID++, azimuth, elevation);
+        }
+    }
+}
 
 
 int main(){
@@ -78,11 +110,12 @@ int main(){
     std::cout << "id,x,y,z\n";
 
     int aantalRays = 20;
-    double maxAzimuth = 45;   // in degrees
-    double maxElevation = 45; // in degrees
+    double maxAzimuth = 60;   // in degrees
+    double maxElevation = 60; // in degrees
     //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
 
-    traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);
+    //traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);
+    traceLed(fiber,aantalRays,maxAzimuth,maxElevation);
 
     return 0;
 }
