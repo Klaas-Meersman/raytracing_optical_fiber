@@ -1,12 +1,11 @@
 #include "ray.hpp"
 #include "fiber.hpp"
 #include <cmath>
-#include <numbers>
 
 // Default constructor
 __host__ __device__
 Ray::Ray()
-    : start(0, 0), end(0, 0), angleOfDeparture(0), fiber(nullptr), endHitFiber(false) {
+    : start(0, 0, 0), end(0, 0, 0), azimuth(0), elevation(0), fiber(nullptr), endHitFiber(false) {
 }
 
 

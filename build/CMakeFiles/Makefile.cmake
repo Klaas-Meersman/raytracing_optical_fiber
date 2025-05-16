@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/home/nvidiasystem/Documenten/raytracing_optical_fiber/CMakeLists.txt"
+  "/home/nvidiasystem/Downloads/raytracing_optical_fiber/CMakeLists.txt"
   "CMakeFiles/3.30.8/CMakeCUDACompiler.cmake"
   "CMakeFiles/3.30.8/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.30.8/CMakeSystem.cmake"
