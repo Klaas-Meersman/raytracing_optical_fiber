@@ -15,7 +15,7 @@ Fiber::Fiber(const Fiber& other)
     : width(other.width), height(other.height), length(other.length) {}
 
 Fiber& Fiber::operator=(const Fiber& other) {
-    return *this; // Const members can't be reassigned
+    return *this;
 }
 
 Fiber::~Fiber() = default;

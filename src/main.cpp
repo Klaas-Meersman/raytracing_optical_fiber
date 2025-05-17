@@ -7,7 +7,7 @@
 #include <random>
 #include <chrono>
 
-// Trace a single ray, returning only the endpoint
+
 Coordinate traceSingleRay(const Fiber &fiber, double azimuth, double elevation) {
     Coordinate startCo(0, 0, 0);
     Ray ray(startCo, azimuth, elevation, fiber);
@@ -18,7 +18,7 @@ Coordinate traceSingleRay(const Fiber &fiber, double azimuth, double elevation) 
     return ray.getEnd();
 }
 
-// Store endpoints in a pre-allocated array
+
 void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg, Coordinate* endpoints) {
     double minAzimuthDeg1 = 360.0 - maxAngleDeg;
     double maxAzimuthDeg1 = 360.0;
@@ -68,7 +68,6 @@ int main(){
     int numberOfRays = 1000000;
     double maxAngle = 85; // Max angle in degrees
 
-    // Pre-allocate array
     Coordinate* endpoints = new Coordinate[numberOfRays];
 
     auto start = std::chrono::steady_clock::now();
@@ -78,14 +77,11 @@ int main(){
     auto end = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
-        // Print all endpoints after timing
     for (int i = 0; i < numberOfRays; ++i) {
         printf("%f,%f,%f\n", endpoints[i].x, endpoints[i].y, endpoints[i].z);
     }
 
     std::cout << elapsed << " ms\n";
-
-
 
     delete[] endpoints;
     return 0;

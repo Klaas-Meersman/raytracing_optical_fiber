@@ -1,12 +1,6 @@
 [
 {
   "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
-  "command": "/usr/bin/c++  -I/home/nvidiasystem/Documenten/raytracing_optical_fiber/. -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/src/coordinate.cpp",
-  "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/src/coordinate.cpp",
-  "output": "CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o"
-},
-{
-  "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
   "command": "/usr/bin/c++  -I/home/nvidiasystem/Documenten/raytracing_optical_fiber/. -std=gnu++20 -o CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/src/main.cpp",
   "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/src/main.cpp",
   "output": "CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o"

@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o"
-  "CMakeFiles/raytracing_optical_fiber.dir/src/coordinate.cpp.o.d"
   "CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o"
   "CMakeFiles/raytracing_optical_fiber.dir/src/fiber.cpp.o.d"
   "CMakeFiles/raytracing_optical_fiber.dir/src/main.cpp.o"

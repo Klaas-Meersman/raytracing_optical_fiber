@@ -11,7 +11,6 @@ include_directories(.)
 
 file(GLOB SOURCES "src/*.cpp")
 add_executable(raytracing_optical_fiber
-        src/coordinate.cpp
         src/coordinate.hpp
         src/main.cpp
         src/ray.cpp
