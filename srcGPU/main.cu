@@ -26,6 +26,8 @@ __global__ void initCurandStates(curandState *states, int numRays, unsigned long
     }
 }
 
+
+//implementation without binning the elevation angles
 /* __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState* states) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= numRays) return;
@@ -112,7 +114,6 @@ __global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curan
 
     curandState localState = states[idx];
 
-    // Azimuth: [360-maxAngleDeg, 360°) U [0°, maxAngleDeg)
     double minAzimuthDeg1 = 360.0 - maxAngleDeg;
     double maxAzimuthDeg1 = 360.0;
     double minAzimuthDeg2 = 0.0;
@@ -127,17 +128,16 @@ __global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curan
     }
     double phi = phiDeg * M_PI / 180.0;
 
-    // Elevation: sample uniformly within this bin's range
     double v = curand_uniform_double(&localState);
 
-    // Lambertian: cosine-weighted elevation within bin
+    //Lambertian: cosine-weighted elevation within bin
     double cosThetaMin = cos(binMax * M_PI / 180.0);
     double cosThetaMax = cos(binMin * M_PI / 180.0);
     double w = curand_uniform_double(&localState);
     double cosTheta = w * (cosThetaMax - cosThetaMin) + cosThetaMin;
     double theta = acos(cosTheta);
 
-    // Randomly flip to negative y hemisphere
+    //Randomly flip to negative y hemisphere
     double flip = curand_uniform_double(&localState);
     if (flip < 0.5) {
         theta = -theta;
@@ -150,61 +150,52 @@ __global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curan
 
 
 Ray* runTraceRayGPU(Fiber* fiber, int numRays){
-    int blockSize = 256;
-    int numBins = 16; // Number of angle bins (tune as needed)
+    int blockSize = 256;//optimized
+    int numBins = 16;//optimized
     double maxAngleDeg = 85.0;
 
-    // Allocate device fiber ONCE
     Fiber* GPU_fiber;
     cudaMalloc((void**)&GPU_fiber, sizeof(Fiber));
     cudaMemcpy(GPU_fiber, fiber, sizeof(Fiber), cudaMemcpyHostToDevice);
 
-    // Prepare host-side arrays for results
     Ray* ray_array = new Ray[numRays];
     int raysPerBin = numRays / numBins;
     int rayOffset = 0;
 
+    //analog to version without binning
     for (int bin = 0; bin < numBins; ++bin) {
         int raysInThisBin = (bin == numBins - 1) ? (numRays - rayOffset) : raysPerBin;
 
-        // Allocate device memory for rays and cuRAND states for this bin
         Ray* GPU_rays;
         cudaMalloc(&GPU_rays, raysInThisBin * sizeof(Ray));
         curandState* d_states;
         cudaMalloc(&d_states, raysInThisBin * sizeof(curandState));
 
-        // Initialize cuRAND states
         unsigned long seed = static_cast<unsigned long>(time(NULL)) + bin;
         int numBlocks = (raysInThisBin + blockSize - 1) / blockSize;
         initCurandStates<<<numBlocks, blockSize>>>(d_states, raysInThisBin, seed);
 
-        // Calculate elevation angle range for this bin
         double binMin = -maxAngleDeg + (2.0 * maxAngleDeg) * bin / numBins;
         double binMax = -maxAngleDeg + (2.0 * maxAngleDeg) * (bin + 1) / numBins;
 
-        // Kernel to initialize rays in this bin with elevation angles in [binMin, binMax]
         initRaysBinned<<<numBlocks, blockSize>>>(GPU_rays, raysInThisBin, GPU_fiber, d_states, binMin, binMax, maxAngleDeg);
 
-        // Trace rays in this bin
         traceRayGPU<<<numBlocks, blockSize>>>(GPU_fiber, GPU_rays, raysInThisBin);
 
-        // Copy results back to correct offset in host array
         cudaMemcpy(ray_array + rayOffset, GPU_rays, raysInThisBin * sizeof(Ray), cudaMemcpyDeviceToHost);
 
-        // Free device memory for this bin
         cudaFree(GPU_rays);
         cudaFree(d_states);
 
         rayOffset += raysInThisBin;
     }
-
     cudaFree(GPU_fiber);
 
     return ray_array;
 }
 
 int main(){
-    //Density simulation
+    //density simulation
     double length_fiber = 100;
     double width_fiber = 5;
     double height_fiber = 5;

@@ -5,18 +5,15 @@
 class Fiber
 {
 private:
-    double_t width, height, length; // Remove const for CUDA compatibility
+    double_t width, height, length;
 
 public:
-    // Inline constructor
     __host__ __device__ Fiber(double_t width = 1, double_t height = 1, double_t length = 1)
         : width(width), height(height), length(length) {}
 
-    // Inline copy constructor
     __host__ __device__ Fiber(const Fiber& other)
         : width(other.width), height(other.height), length(other.length) {}
 
-    // Inline assignment operator
     __host__ __device__ Fiber& operator=(const Fiber& other) {
         if (this != &other) {
             width = other.width;
@@ -26,7 +23,6 @@ public:
         return *this;
     }
 
-    // Inline destructor
     __host__ __device__ ~Fiber() {}
 
     __host__ __device__ inline double_t getTopY() const { return width / 2; }
