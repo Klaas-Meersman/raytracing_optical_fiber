@@ -60,38 +60,55 @@ void traceMultipleRaysSegmented(const Fiber &fiber, int totalRays, double maxAzi
         }
     }
 }
-void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
+
+
+// Lambertian distribution: only rays from 270° to 90° azimuth, max at 0°
+void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg) {
     if (numRays < 20) numRays = 20;
 
-    int elevationSteps = static_cast<int>(std::sqrt(numRays));
-    int azimuthSteps = (numRays + elevationSteps - 1) / elevationSteps;
 
+     // Max elevation angle
+    // Azimuth: [360-maxAngleDeg, 360°) U [0°, maxAngleDeg)
+    double minAzimuthDeg1 = 360.0 - maxAngleDeg;
+    double maxAzimuthDeg1 = 360.0;
+    double minAzimuthDeg2 = 0.0;
+    double maxAzimuthDeg2 = maxAngleDeg;
+    double maxElevationDeg = maxAngleDeg;
+    double maxElevationRad = maxElevationDeg * M_PI / 180.0;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> uniform(0.0, 1.0);
+
+    int rayCount = 0;
     int rayID = 0;
-
-    double gamma = 3; // exponent voor verdeling — hoe hoger, hoe dichter bij 0
-
-    auto generateNonlinearSteps = [&](int steps, double maxDeg) -> std::vector<double> {
-        std::vector<double> angles;
-        for (int i = 0; i < steps; ++i) {
-            double t = static_cast<double>(i) / (steps - 1);   // 0 .. 1
-            double x = 2 * t - 1;                              // -1 .. 1
-            double curved = x * std::pow(std::abs(x), gamma); // meer punten rond 0
-            double angle = curved * maxDeg;                   // -maxDeg .. maxDeg
-            angles.push_back(angle * 3.1415 / 180.0);           // graden naar radialen
+    while (rayCount < numRays) {
+        // Sample azimuth in [270°, 360°) U [0°, 90°)
+        double u = uniform(gen);
+        double phiDeg;
+        if (u < 0.5) {
+            phiDeg = minAzimuthDeg1 + (maxAzimuthDeg1 - minAzimuthDeg1) * (u / 0.5);
+        } else {
+            phiDeg = minAzimuthDeg2 + (maxAzimuthDeg2 - minAzimuthDeg2) * ((u - 0.5) / 0.5);
         }
-        return angles;
-    };
+        double phi = phiDeg * M_PI / 180.0;
 
-    std::vector<double> azimuthAngles = generateNonlinearSteps(azimuthSteps, maxAzimuthDeg);
-    std::vector<double> elevationAngles = generateNonlinearSteps(elevationSteps, maxElevationDeg);
+        // Cosine-weighted elevation (Lambertian)
+        double cosThetaMin = std::cos(maxElevationRad);
+        double cosTheta = uniform(gen) * (1.0 - cosThetaMin) + cosThetaMin;
+        double theta = std::acos(cosTheta);
 
-    for (double elevation : elevationAngles) {
-        for (double azimuth : azimuthAngles) {
-            if (rayID >= numRays) break;
-            traceSingleRayWithID(fiber, rayID++, azimuth, elevation);
+        // Randomly flip to negative y hemisphere
+        if (uniform(gen) < 0.5) {
+            theta = -theta;
         }
+
+        traceSingleRayWithID(fiber, rayID++, phi, theta);
+        ++rayCount;
     }
 }
+
+
 
 
 int main(){
@@ -109,13 +126,13 @@ int main(){
     // CSV-header
     std::cout << "id,x,y,z\n";
 
-    int aantalRays = 20;
-    double maxAzimuth = 60;   // in degrees
-    double maxElevation = 60; // in degrees
+    int aantalRays = 500;
+    double maxAngleDeg = 30;
+
     //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
 
     //traceMultipleRaysSegmented(fiber,aantalRays , maxAzimuth, maxElevation);
-    traceLed(fiber,aantalRays,maxAzimuth,maxElevation);
+    traceLed(fiber,aantalRays,maxAngleDeg);
 
     return 0;
 }

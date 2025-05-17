@@ -3,6 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include <string>
+#include <algorithm>
 
 
 Ray::Ray()
