@@ -20,7 +20,7 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
     }
 }
 
-
+//to be able to use random numbers in the kernel
 __global__ void initCurandStates(curandState *states, int numRays, unsigned long seed) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < numRays) {

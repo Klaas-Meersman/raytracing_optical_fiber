@@ -129,54 +129,6 @@ raytracing_optical_fiber/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/build
 .PHONY : raytracing_optical_fiber/fast
 
-srcGPU/coordinate.o: srcGPU/coordinate.cu.o
-.PHONY : srcGPU/coordinate.o
-
-# target to build an object file
-srcGPU/coordinate.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.o
-.PHONY : srcGPU/coordinate.cu.o
-
-srcGPU/coordinate.i: srcGPU/coordinate.cu.i
-.PHONY : srcGPU/coordinate.i
-
-# target to preprocess a source file
-srcGPU/coordinate.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.i
-.PHONY : srcGPU/coordinate.cu.i
-
-srcGPU/coordinate.s: srcGPU/coordinate.cu.s
-.PHONY : srcGPU/coordinate.s
-
-# target to generate assembly for a file
-srcGPU/coordinate.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/coordinate.cu.s
-.PHONY : srcGPU/coordinate.cu.s
-
-srcGPU/fiber.o: srcGPU/fiber.cu.o
-.PHONY : srcGPU/fiber.o
-
-# target to build an object file
-srcGPU/fiber.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.o
-.PHONY : srcGPU/fiber.cu.o
-
-srcGPU/fiber.i: srcGPU/fiber.cu.i
-.PHONY : srcGPU/fiber.i
-
-# target to preprocess a source file
-srcGPU/fiber.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.i
-.PHONY : srcGPU/fiber.cu.i
-
-srcGPU/fiber.s: srcGPU/fiber.cu.s
-.PHONY : srcGPU/fiber.s
-
-# target to generate assembly for a file
-srcGPU/fiber.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/fiber.cu.s
-.PHONY : srcGPU/fiber.cu.s
-
 srcGPU/main.o: srcGPU/main.cu.o
 .PHONY : srcGPU/main.o
 
@@ -201,30 +153,6 @@ srcGPU/main.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.s
 .PHONY : srcGPU/main.cu.s
 
-srcGPU/ray.o: srcGPU/ray.cu.o
-.PHONY : srcGPU/ray.o
-
-# target to build an object file
-srcGPU/ray.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.o
-.PHONY : srcGPU/ray.cu.o
-
-srcGPU/ray.i: srcGPU/ray.cu.i
-.PHONY : srcGPU/ray.i
-
-# target to preprocess a source file
-srcGPU/ray.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.i
-.PHONY : srcGPU/ray.cu.i
-
-srcGPU/ray.s: srcGPU/ray.cu.s
-.PHONY : srcGPU/ray.s
-
-# target to generate assembly for a file
-srcGPU/ray.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/raytracing_optical_fiber.dir/build.make CMakeFiles/raytracing_optical_fiber.dir/srcGPU/ray.cu.s
-.PHONY : srcGPU/ray.cu.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -234,18 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... raytracing_optical_fiber"
-	@echo "... srcGPU/coordinate.o"
-	@echo "... srcGPU/coordinate.i"
-	@echo "... srcGPU/coordinate.s"
-	@echo "... srcGPU/fiber.o"
-	@echo "... srcGPU/fiber.i"
-	@echo "... srcGPU/fiber.s"
 	@echo "... srcGPU/main.o"
 	@echo "... srcGPU/main.i"
 	@echo "... srcGPU/main.s"
-	@echo "... srcGPU/ray.o"
-	@echo "... srcGPU/ray.i"
-	@echo "... srcGPU/ray.s"
 .PHONY : help
 
 
