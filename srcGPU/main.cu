@@ -10,13 +10,13 @@
 
 __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
 {
-    const int maxbounces = 1000000;
+    //const int maxbounces = 1000000;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < numRays) {
-        int bounce = 0;
-        while (!rays[idx].getEndHitFiber() && bounce < maxbounces) {
+        //int bounce = 0;
+        while (!rays[idx].getEndHitFiber()) {//&& bounce < maxbounces) {
             rays[idx] = rays[idx].propagateRay();
-            bounce++;
+            //bounce++;
             /* if(maxbounces == bounce){
                 printf("Hit max bounces\n");
             } */
@@ -44,9 +44,7 @@ __device__ double nonlinear_angle(int i, int steps, double maxDeg, double gamma)
     return angle * (M_PI / 180.0);           // degrees to radians
 }
 
-__global__ void initRays(
-    Ray* rays, int numRays, const Fiber* fiber
-) {
+__global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
     double maxAzimuthDeg = 30;
     double maxElevationDeg = 30;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -71,7 +69,7 @@ __global__ void initRays(
 }
 
 
-void runTraceRayGPU(Fiber* fiber,int numRays)
+void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
 {
     int blockSize = 256;
     int numBlocks = (numRays + blockSize - 1) / blockSize;
@@ -100,112 +98,36 @@ void runTraceRayGPU(Fiber* fiber,int numRays)
     cudaFree(GPU_rays);
     cudaFree(GPU_fiber);
     
-    // print the rays calculated on the GPU
-    /* for (int i = 0; i < numRays; ++i) {
-        std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
-    } */
+    if(printDensity){
+    // print the rays density at end of fiber calculated on the GPU
+        for (int i = 0; i < numRays; ++i) {
+            std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
+        }
+    }
     delete[] ray_array;
 }
 
 
-/* __global__  void debugRayGPU(Fiber* fiber, Ray* input_ray, Ray* output_rays, int maxBounces)
-{
-    int idx = 0;
-
-    while(!input_ray->getEndHitFiber() && idx< maxBounces)
-    {
-        //printf("Passing in main while not hit end ray propagtion\n");
-        input_ray->propagateRay();
-        output_rays[idx] = *input_ray;
-        idx++;
-    }
-}
-
-__global__ void initRay(Ray* d_ray, Coordinate start, double_t angle, const Fiber* fiber) {
-    *d_ray = Ray(start, angle, fiber);
-}
-
-void runDebugTraceRayGPU(Fiber* fiber){
-    double_t angleDegrees = 30;
-    double_t angleRadians = angleDegrees * (M_PI / 180.0);
-
-    // Allocate the fiber on the GPU
-    Fiber* GPU_fiber;
-    cudaMalloc((void**)&GPU_fiber, sizeof(Fiber));
-    cudaMemcpy(GPU_fiber, fiber, sizeof(Fiber), cudaMemcpyHostToDevice);
-
-    Coordinate startCo = Coordinate(0, 0);
-    // IMPORTANT: Use GPU_fiber as the pointer!
-    Ray* d_ray;
-    cudaMalloc((void**)&d_ray, sizeof(Ray));
-
-    int maxBounces = 100;
-
-    Ray* output_rays;
-    cudaMalloc((void**)&output_rays, maxBounces * sizeof(Ray));
-
-    initRay<<<1, 1>>>(d_ray, startCo, angleRadians, GPU_fiber);
-    cudaDeviceSynchronize();
-
-    debugRayGPU<<<1, 1>>>(GPU_fiber, d_ray, output_rays, maxBounces);
-    cudaDeviceSynchronize();
-
-    // Copy results back
-    Ray* rays = new Ray[maxBounces];
-    cudaMemcpy(rays, output_rays, maxBounces * sizeof(Ray), cudaMemcpyDeviceToHost);
-
-    std::cout << rays[0].getStart().x << ", " << rays[0].getStart().y << std::endl;
-
-    for (int i = 0; i < maxBounces; ++i) {
-        // Stop printing if the ray has hit the fiber end
-        if (rays[i].getEndHitFiber() || (i > 0 && rays[i].getStart().x == rays[i].getEnd().x && rays[i].getStart().y == rays[i].getEnd().y)) {
-            std::cout << rays[i].getEnd().x << ", " << rays[i].getEnd().y << std::endl;
-            break;
-        }
-        std::cout << rays[i].getEnd().x << ", " << rays[i].getEnd().y << std::endl;
-    }
-
-    //
-
-    cudaFree(output_rays);
-    cudaFree(GPU_fiber);
-    cudaFree(d_ray);
-    delete[] rays;
-}
-
-int main()
-{
-    double length_fiber = 100;
-    double width_fiber = 5;
-    Fiber fiber(width_fiber, length_fiber);
-    printf("fiber_length,%f\n", fiber.getLength());
-    printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
-    printf("x,y\n");
-    runDebugTraceRayGPU(&fiber);
-
-    return 0;
-} */
-
-
 int main(){
     //Density simulation
-
+    bool printDensity = true;
     double length_fiber = 100;
     double width_fiber = 5;
     double height_fiber = 5;
     Fiber fiber(width_fiber, height_fiber, length_fiber);
     printf("fiber_length,%f\n", fiber.getLength());
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
-    printf("x,y\n");
+    printf("fiber_top_z,%f\nfiber_bottom_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
+    printf("x,y,z\n");
 
     int numRays = 1000000;
 
     auto start = std::chrono::steady_clock::now();
 
-    runTraceRayGPU(&fiber, numRays);
+    runTraceRayGPU(&fiber, numRays,printDensity);
 
     auto end = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "Elapsed time: " << elapsed << " ms\n";
+    std::cout << elapsed << "ms\n";
 
 }
