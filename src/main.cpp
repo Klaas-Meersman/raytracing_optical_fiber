@@ -77,8 +77,8 @@ int main(){
     printf("fiber_top_z,%f\nfiber_bottom_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
     printf("x,y,z\n");
 
-    int numberOfRays = 100000;
-    double maxAngle = 90.0; // Max angle in degrees
+    int numberOfRays = 1000000;
+    double maxAngle = 70; // Max angle in degrees
 
     auto start = std::chrono::steady_clock::now();
 
