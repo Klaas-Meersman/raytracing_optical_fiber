@@ -7,23 +7,19 @@
 #include <random>
 #include <chrono>
 
-// Trace a single ray, outputting only the endpoint (no ID)
-void traceSingleRay(const Fiber &fiber, double azimuth, double elevation) {
+// Trace a single ray, returning only the endpoint
+Coordinate traceSingleRay(const Fiber &fiber, double azimuth, double elevation) {
     Coordinate startCo(0, 0, 0);
     Ray ray(startCo, azimuth, elevation, fiber);
 
     while (!ray.getEndHitFiber()) {
         ray.propagateRay();
     }
-    printf("%f,%f,%f\n", ray.getEnd().x, ray.getEnd().y, ray.getEnd().z);
+    return ray.getEnd();
 }
 
-
-
-// Lambertian distribution: only rays from 270° to 90° azimuth, max at 0°
-void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg) {
-    if (numRays < 20) numRays = 20;
-    // Azimuth: [360-maxAngleDeg, 360°) U [0°, maxAngleDeg)
+// Store endpoints in a pre-allocated array
+void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg, Coordinate* endpoints) {
     double minAzimuthDeg1 = 360.0 - maxAngleDeg;
     double maxAzimuthDeg1 = 360.0;
     double minAzimuthDeg2 = 0.0;
@@ -35,10 +31,7 @@ void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> uniform(0.0, 1.0);
 
-    int rayCount = 0;
-    int rayID = 0;
-    while (rayCount < numRays) {
-        // Sample azimuth in [270°, 360°) U [0°, 90°)
+    for (int rayCount = 0; rayCount < numRays; ++rayCount) {
         double u = uniform(gen);
         double phiDeg;
         if (u < 0.5) {
@@ -48,21 +41,17 @@ void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg) {
         }
         double phi = phiDeg * M_PI / 180.0;
 
-        // Cosine-weighted elevation (Lambertian)
         double cosThetaMin = std::cos(maxElevationRad);
         double cosTheta = uniform(gen) * (1.0 - cosThetaMin) + cosThetaMin;
         double theta = std::acos(cosTheta);
 
-        // Randomly flip to negative y hemisphere
         if (uniform(gen) < 0.5) {
             theta = -theta;
         }
 
-        traceSingleRay(fiber, phi, theta);
-        ++rayCount;
+        endpoints[rayCount] = traceSingleRay(fiber, phi, theta);
     }
 }
-
 
 int main(){
     double length_fiber = 100;
@@ -79,13 +68,25 @@ int main(){
     int numberOfRays = 1000000;
     double maxAngle = 85; // Max angle in degrees
 
+    // Pre-allocate array
+    Coordinate* endpoints = new Coordinate[numberOfRays];
+
     auto start = std::chrono::steady_clock::now();
 
-    traceLed(fiber, numberOfRays, maxAngle);
+    traceLed(fiber, numberOfRays, maxAngle, endpoints);
 
     auto end = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+        // Print all endpoints after timing
+    for (int i = 0; i < numberOfRays; ++i) {
+        printf("%f,%f,%f\n", endpoints[i].x, endpoints[i].y, endpoints[i].z);
+    }
+
     std::cout << elapsed << " ms\n";
 
+
+
+    delete[] endpoints;
     return 0;
 }
