@@ -61,7 +61,7 @@ Ray::Ray(Coordinate start, double_t azimuth, double_t elevation, const Fiber &fi
 }
 
 
-Ray Ray::propagateRay() {
+void Ray::propagateRay() {
     // Update startpunt naar huidig eindpunt
     start = end;
 
@@ -96,7 +96,5 @@ Ray Ray::propagateRay() {
     //Kijken of we aan het einde zitten!
     if (t == tx) {
         endHitFiber = true;
-    }
-
-    return *this;
+    };
 }

@@ -23,7 +23,7 @@ private:
 public:
     std::vector<Coordinate> generateStraightPath(double dx);
     Ray generateBounceRay(const Fiber& fiber);
-    Ray propagateRay();
+    void propagateRay();
     inline Coordinate getStart() const { return start; }
     inline Coordinate getEnd() const { return end; }
     inline double_t getAzimuth() const { return azimuth; }

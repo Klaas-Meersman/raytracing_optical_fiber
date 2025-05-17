@@ -13,10 +13,9 @@ void traceSingleRay(const Fiber &fiber, double azimuth, double elevation) {
     Ray ray(startCo, azimuth, elevation, fiber);
 
     while (!ray.getEndHitFiber()) {
-        ray = ray.propagateRay();
+        ray.propagateRay();
     }
-    // Output the end point: x,y,z (no id)
-    std::cout << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
+    printf("%f,%f,%f\n", ray.getEnd().x, ray.getEnd().y, ray.getEnd().z);
 }
 
 
