@@ -339,4 +339,23 @@ CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o : /home/nvidiasystem/Do
     /usr/include/c++/14/variant \
     /usr/include/c++/14/bits/ranges_algobase.h \
     /usr/include/c++/14/bits/unicode.h \
-    /usr/include/c++/14/bits/unicode-data.h
+    /usr/include/c++/14/bits/unicode-data.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_kernel.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/nv/target \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/nv/detail/__target_macros \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/nv/detail/__preprocessor \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_discrete.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_precalc.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_mrg32k3a.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_mtgp32_kernel.h \
+    /usr/include/memory.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_mtgp32.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_philox4x32_x.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_globals.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_uniform.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_normal.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_normal_static.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_lognormal.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_poisson.h \
+    /usr/local/cuda/bin/../targets/x86_64-linux/include/curand_discrete2.h

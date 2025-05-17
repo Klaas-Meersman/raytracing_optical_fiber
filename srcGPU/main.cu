@@ -5,6 +5,7 @@
 #include "ray.hpp"
 #include "fiber.hpp"
 #include <chrono>
+#include <curand_kernel.h>
 
 
 
@@ -20,18 +21,20 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
 }
 
 
-__device__ double rand_uniform(int idx, int salt = 0) {
-    // Simple LCG for per-thread reproducible pseudo-random numbers
-    unsigned int seed = 123456789u + idx * 65497u + salt * 9973u;
-    seed = (1103515245u * seed + 12345u) & 0x7fffffff;
-    return seed / double(0x7fffffff);
+__global__ void initCurandStates(curandState *states, int numRays, unsigned long seed) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numRays) {
+        curand_init(seed, idx, 0, &states[idx]);
+    }
 }
 
-__global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
+__global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState* states) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= numRays) return;
 
-    double maxAngleDeg = 70.0; // Only change this value!
+    curandState localState = states[idx];
+
+    double maxAngleDeg = 70.0;
     double minAzimuthDeg1 = 360.0 - maxAngleDeg;
     double maxAzimuthDeg1 = 360.0;
     double minAzimuthDeg2 = 0.0;
@@ -39,8 +42,8 @@ __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
     double maxElevationDeg = maxAngleDeg;
     double maxElevationRad = maxElevationDeg * M_PI / 180.0;
 
-    // Per-thread pseudo-random numbers
-    double u = rand_uniform(idx, 0);
+    // Use cuRAND for random numbers
+    double u = curand_uniform_double(&localState);
     double phiDeg;
     if (u < 0.5) {
         phiDeg = minAzimuthDeg1 + (maxAzimuthDeg1 - minAzimuthDeg1) * (u / 0.5);
@@ -49,19 +52,20 @@ __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
     }
     double phi = phiDeg * M_PI / 180.0;
 
-    // Cosine-weighted elevation (Lambertian)
-    double v = rand_uniform(idx, 1);
+    double v = curand_uniform_double(&localState);
     double cosThetaMin = cos(maxElevationRad);
     double cosTheta = v * (1.0 - cosThetaMin) + cosThetaMin;
     double theta = acos(cosTheta);
 
-    // Randomly flip to negative y hemisphere
-    double w = rand_uniform(idx, 2);
+    double w = curand_uniform_double(&localState);
     if (w < 0.5) {
         theta = -theta;
     }
 
     rays[idx] = Ray(Coordinate(0, 0, 0), phi, theta, fiber);
+
+    // Save state back
+    states[idx] = localState;
 }
 
 
@@ -76,13 +80,16 @@ void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
     cudaMalloc((void**)&GPU_fiber, sizeof(Fiber));
     cudaMemcpy(GPU_fiber, fiber, sizeof(Fiber), cudaMemcpyHostToDevice);
 
-    
+    // Allocate and initialize cuRAND states
+    curandState* d_states;
+    cudaMalloc(&d_states, numRays * sizeof(curandState));
+    unsigned long seed = static_cast<unsigned long>(time(NULL));
+    initCurandStates<<<numBlocks, blockSize>>>(d_states, numRays, seed);
+    cudaDeviceSynchronize();
 
     cudaMalloc((void**)&GPU_rays, numRays * sizeof(Ray));
-    initRays<<<numBlocks, blockSize>>>(GPU_rays, numRays, GPU_fiber);
+    initRays<<<numBlocks, blockSize>>>(GPU_rays, numRays, GPU_fiber, d_states);
     cudaDeviceSynchronize();
-    
-    // Allocate GPU memory for Fiber
 
     traceRayGPU<<<numBlocks, blockSize>>>(GPU_fiber, GPU_rays, numRays);
     cudaDeviceSynchronize();
@@ -91,9 +98,9 @@ void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
 
     cudaFree(GPU_rays);
     cudaFree(GPU_fiber);
-    
+    cudaFree(d_states); // <--- free cuRAND states
+
     if(printDensity){
-    // print the rays density at end of fiber calculated on the GPU
         for (int i = 0; i < numRays; ++i) {
             std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
         }
