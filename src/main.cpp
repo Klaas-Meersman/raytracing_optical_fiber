@@ -13,11 +13,11 @@ void traceSingleRayWithID(const Fiber &fiber, int rayID, double azimuth, double 
     Ray ray(startCo, azimuth, elevation, fiber);
 
     while (!ray.getEndHitFiber()) {
-        //std::cout << rayID << "," << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
+        std::cout << rayID << "," << ray.getStart().x << "," << ray.getStart().y << "," << ray.getStart().z << std::endl;
         ray = ray.propagateRay();
     }
     // Output the end point
-    //std::cout << rayID << "," << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
+    std::cout << rayID << "," << ray.getEnd().x << "," << ray.getEnd().y << "," << ray.getEnd().z << std::endl;
 }
 
 
@@ -61,36 +61,34 @@ void traceMultipleRaysSegmented(const Fiber &fiber, int totalRays, double maxAzi
         }
     }
 }
-void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
-    if (numRays < 20) numRays = 20;
 
-    int elevationSteps = static_cast<int>(std::sqrt(numRays));
-    int azimuthSteps = (numRays + elevationSteps - 1) / elevationSteps;
+
+//lambertian distribution
+void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
+   if (numRays < 20) numRays = 20;
+
+    // Convert degrees to radians
+    double maxAzimuthRad = maxAzimuthDeg * M_PI / 180.0;
+    double maxElevationRad = maxElevationDeg * M_PI / 180.0;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> uniform(0.0, 1.0);
 
     int rayID = 0;
+    while (rayID < numRays) {
+        // Sample azimuth uniformly
+        double phi = (uniform(gen) * 2.0 - 1.0) * maxAzimuthRad; // [-maxAzimuthRad, +maxAzimuthRad]
 
-    double gamma = 3; // exponent voor verdeling — hoe hoger, hoe dichter bij 0
+        // Sample elevation with cosine-weighted distribution
+        // cos(theta) uniformly in [cos(maxElevationRad), 1]
+        double cosThetaMin = std::cos(maxElevationRad);
+        double cosTheta = uniform(gen) * (1.0 - cosThetaMin) + cosThetaMin;
+        double theta = std::acos(cosTheta);
 
-    auto generateNonlinearSteps = [&](int steps, double maxDeg) -> std::vector<double> {
-        std::vector<double> angles;
-        for (int i = 0; i < steps; ++i) {
-            double t = static_cast<double>(i) / (steps - 1);   // 0 .. 1
-            double x = 2 * t - 1;                              // -1 .. 1
-            double curved = x * std::pow(std::abs(x), gamma); // meer punten rond 0
-            double angle = curved * maxDeg;                   // -maxDeg .. maxDeg
-            angles.push_back(angle * 3.1415 / 180.0);           // graden naar radialen
-        }
-        return angles;
-    };
+        // Optionally, you can filter out rays outside the maxAzimuth/maxElevation if you want a strict cone
 
-    std::vector<double> azimuthAngles = generateNonlinearSteps(azimuthSteps, maxAzimuthDeg);
-    std::vector<double> elevationAngles = generateNonlinearSteps(elevationSteps, maxElevationDeg);
-
-    for (double elevation : elevationAngles) {
-        for (double azimuth : azimuthAngles) {
-            if (rayID >= numRays) break;
-            traceSingleRayWithID(fiber, rayID++, azimuth, elevation);
-        }
+        traceSingleRayWithID(fiber, rayID++, phi, theta);
     }
 }
 
@@ -110,7 +108,7 @@ int main(){
     // CSV-header
     std::cout << "id,x,y,z\n";
 
-    int aantalRays = 1000000;
+    int aantalRays = 100000;
     double maxAzimuth = 60;   // in degrees
     double maxElevation = 60; // in degrees
     //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
