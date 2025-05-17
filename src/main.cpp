@@ -21,11 +21,13 @@ void traceSingleRayNoID(const Fiber &fiber, double azimuth, double elevation) {
 
 
 
-// Lambertian distribution
+// Lambertian distribution: only rays from 270° to 90° azimuth, max at 0°
 void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
     if (numRays < 20) numRays = 20;
 
-    double maxAzimuthRad = maxAzimuthDeg * M_PI / 180.0;
+    // Limit azimuth to [-90°, +90°], i.e., [-π/2, +π/2] radians
+    double minAzimuthRad = -M_PI / 2;
+    double maxAzimuthRad = M_PI / 2;
     double maxElevationRad = maxElevationDeg * M_PI / 180.0;
 
     std::random_device rd;
@@ -34,8 +36,10 @@ void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxE
 
     int rayCount = 0;
     while (rayCount < numRays) {
-        double phi = (uniform(gen) * 2.0 - 1.0) * maxAzimuthRad; // [-maxAzimuthRad, +maxAzimuthRad]
+        // Sample phi uniformly in [-π/2, +π/2]
+        double phi = minAzimuthRad + uniform(gen) * (maxAzimuthRad - minAzimuthRad);
 
+        // Cosine-weighted elevation (Lambertian)
         double cosThetaMin = std::cos(maxElevationRad);
         double cosTheta = uniform(gen) * (1.0 - cosThetaMin) + cosThetaMin;
         double theta = std::acos(cosTheta);
@@ -45,6 +49,7 @@ void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxE
     }
 }
 
+
 int main(){
     double length_fiber = 100;
     double width_fiber = 5;
@@ -52,13 +57,10 @@ int main(){
 
     Fiber fiber(width_fiber, height_fiber, length_fiber);
 
-    // Metadata
     printf("fiber_length,%f\n", fiber.getLength());
     printf("fiber_top_y,%f\nfiber_bottom_y,%f\n", fiber.getTopY(), fiber.getBottomY());
-    printf("fiber_left_z,%f\nfiber_right_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
-
-    // CSV-header (no id)
-    std::cout << "x,y,z\n";
+    printf("fiber_top_z,%f\nfiber_bottom_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
+    printf("x,y,z\n");
 
     int aantalRays = 1000000;
     double maxAzimuth = 70;   // in degrees

@@ -67,7 +67,7 @@ def plot_yz_density_at_fiber_end(build_dir, binary_name):
 
     # 2D histogram for density estimation (no KDE)
     y_bins = np.linspace(fiber_info['fiber_bottom_y'], fiber_info['fiber_top_y'], 300)
-    z_bins = np.linspace(fiber_info['fiber_right_z'], fiber_info['fiber_left_z'], 300)
+    z_bins = np.linspace(fiber_info['fiber_bottom_z'], fiber_info['fiber_top_z'], 300)
     density, y_edges, z_edges = np.histogram2d(y, z, bins=[y_bins, z_bins], density=True)
 
     # Custom colormap: white (low) → purple (high)
@@ -81,7 +81,7 @@ def plot_yz_density_at_fiber_end(build_dir, binary_name):
         origin='lower',
         extent=[
             fiber_info['fiber_bottom_y'], fiber_info['fiber_top_y'],
-            fiber_info['fiber_left_z'], fiber_info['fiber_right_z']
+            fiber_info['fiber_bottom_z'], fiber_info['fiber_top_z']
         ],
         cmap=purple_white_cmap,
         aspect='auto'
