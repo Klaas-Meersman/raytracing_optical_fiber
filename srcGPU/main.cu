@@ -14,7 +14,7 @@ __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < numRays) {
         while (!rays[idx].getEndHitFiber()) {
-            rays[idx] = rays[idx].propagateRay();
+            rays[idx].propagateRay();
 
         }
     }
@@ -34,7 +34,7 @@ __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState
 
     curandState localState = states[idx];
 
-    double maxAngleDeg = 70.0;
+    double maxAngleDeg = 85.0;
     double minAzimuthDeg1 = 360.0 - maxAngleDeg;
     double maxAzimuthDeg1 = 360.0;
     double minAzimuthDeg2 = 0.0;
@@ -71,7 +71,7 @@ __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState
 
 void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
 {
-    int blockSize = 256;
+    int blockSize = 128;
     int numBlocks = (numRays + blockSize - 1) / blockSize;
     Ray* ray_array = new Ray[numRays];
     Ray* GPU_rays;
@@ -102,7 +102,9 @@ void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
 
     if(printDensity){
         for (int i = 0; i < numRays; ++i) {
-            std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
+            //std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
+            //printf version
+            printf("%f, %f, %f\n", ray_array[i].getEnd().x, ray_array[i].getEnd().y, ray_array[i].getEnd().z);
         }
     }
     delete[] ray_array;

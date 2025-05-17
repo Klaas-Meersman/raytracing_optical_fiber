@@ -80,7 +80,7 @@ public:
     __host__ __device__ inline bool getEndHitFiber() const { return endHitFiber; }
     __host__ __device__ inline void setEndHitFiber(bool endHitFiber) { this->endHitFiber = endHitFiber; }
 
-    __host__ __device__ inline Ray propagateRay() {
+    __host__ __device__ inline void propagateRay() {
         // Update startpunt naar huidig eindpunt
         start = end;
 
@@ -117,7 +117,5 @@ public:
         if (t == tx) {
             endHitFiber = true;
         }
-
-        return *this;
-        }
+    }
 };
