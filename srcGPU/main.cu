@@ -9,13 +9,11 @@
 
 
 
-__global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
-{
+__global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays){
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < numRays) {
         while (!rays[idx].getEndHitFiber()) {
             rays[idx].propagateRay();
-
         }
     }
 }
@@ -131,9 +129,6 @@ __global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curan
 
     // Elevation: sample uniformly within this bin's range
     double v = curand_uniform_double(&localState);
-    double elevationDeg = binMin + (binMax - binMin) * v;
-    double maxElevationRad = maxAngleDeg * M_PI / 180.0;
-    double elevationRad = elevationDeg * M_PI / 180.0;
 
     // Lambertian: cosine-weighted elevation within bin
     double cosThetaMin = cos(binMax * M_PI / 180.0);
@@ -154,8 +149,7 @@ __global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curan
 }
 
 
-Ray* runTraceRayGPU(Fiber* fiber, int numRays)
-{
+Ray* runTraceRayGPU(Fiber* fiber, int numRays){
     int blockSize = 256;
     int numBins = 16; // Number of angle bins (tune as needed)
     double maxAngleDeg = 85.0;
@@ -183,7 +177,6 @@ Ray* runTraceRayGPU(Fiber* fiber, int numRays)
         unsigned long seed = static_cast<unsigned long>(time(NULL)) + bin;
         int numBlocks = (raysInThisBin + blockSize - 1) / blockSize;
         initCurandStates<<<numBlocks, blockSize>>>(d_states, raysInThisBin, seed);
-        cudaDeviceSynchronize();
 
         // Calculate elevation angle range for this bin
         double binMin = -maxAngleDeg + (2.0 * maxAngleDeg) * bin / numBins;
@@ -191,11 +184,9 @@ Ray* runTraceRayGPU(Fiber* fiber, int numRays)
 
         // Kernel to initialize rays in this bin with elevation angles in [binMin, binMax]
         initRaysBinned<<<numBlocks, blockSize>>>(GPU_rays, raysInThisBin, GPU_fiber, d_states, binMin, binMax, maxAngleDeg);
-        cudaDeviceSynchronize();
 
         // Trace rays in this bin
         traceRayGPU<<<numBlocks, blockSize>>>(GPU_fiber, GPU_rays, raysInThisBin);
-        cudaDeviceSynchronize();
 
         // Copy results back to correct offset in host array
         cudaMemcpy(ray_array + rayOffset, GPU_rays, raysInThisBin * sizeof(Ray), cudaMemcpyDeviceToHost);

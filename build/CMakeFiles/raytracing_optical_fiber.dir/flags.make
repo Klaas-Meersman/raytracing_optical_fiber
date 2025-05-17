@@ -6,5 +6,5 @@ CUDA_DEFINES =
 
 CUDA_INCLUDES = --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp
 
-CUDA_FLAGS = -std=c++20 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Wno-deprecated-gpu-targets
+CUDA_FLAGS = -std=c++20 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Wno-deprecated-gpu-targets -use_fast_math
 

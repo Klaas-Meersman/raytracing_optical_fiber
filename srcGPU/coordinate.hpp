@@ -9,7 +9,7 @@ struct Coordinate {
     double_t z = 0;
 
     // Constructors
-    __host__ __device__ constexpr Coordinate() = default;
+    constexpr Coordinate() = default;
     __host__ __device__ constexpr Coordinate(double_t x, double_t y, double_t z) noexcept : x(x), y(y), z(z) {}
 
     // Operators

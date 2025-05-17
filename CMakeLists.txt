@@ -20,4 +20,7 @@ add_executable(raytracing_optical_fiber
 target_link_libraries(raytracing_optical_fiber PRIVATE curand)
 
 # (Optional) Suppress deprecated GPU target warning
-target_compile_options(raytracing_optical_fiber PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>)
+target_compile_options(raytracing_optical_fiber PRIVATE
+    $<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>
+    $<$<COMPILE_LANGUAGE:CUDA>:-use_fast_math>
+)

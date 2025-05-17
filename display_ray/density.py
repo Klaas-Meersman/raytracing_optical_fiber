@@ -89,7 +89,7 @@ def plot_yz_density_at_fiber_end(build_dir, binary_name):
     plt.colorbar(label='Density')
     plt.xlabel('Y')
     plt.ylabel('Z')
-    plt.title(f"Density plot at fiber end face (x ≈ {fiber_info['fiber_length']})")
+    plt.title(f"Density plot at fiber end face (x = {fiber_info['fiber_length']})")
     plt.grid(True)
     plt.show()
 

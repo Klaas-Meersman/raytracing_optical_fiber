@@ -1,7 +1,7 @@
 [
 {
   "directory": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/build",
-  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/raytracing_optical_fiber.dir/includes_CUDA.rsp -std=c++20 \"--generate-code=arch=compute_52,code=[compute_52,sm_52]\" -Wno-deprecated-gpu-targets -use_fast_math -x cu -c /home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu -o CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o",
   "file": "/home/nvidiasystem/Documenten/raytracing_optical_fiber/srcGPU/main.cu",
   "output": "CMakeFiles/raytracing_optical_fiber.dir/srcGPU/main.cu.o"
 }
