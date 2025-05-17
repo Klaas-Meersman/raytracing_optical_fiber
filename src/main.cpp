@@ -8,7 +8,7 @@
 #include <chrono>
 
 // Trace a single ray, outputting only the endpoint (no ID)
-void traceSingleRayNoID(const Fiber &fiber, double azimuth, double elevation) {
+void traceSingleRay(const Fiber &fiber, double azimuth, double elevation) {
     Coordinate startCo(0, 0, 0);
     Ray ray(startCo, azimuth, elevation, fiber);
 
@@ -22,12 +22,14 @@ void traceSingleRayNoID(const Fiber &fiber, double azimuth, double elevation) {
 
 
 // Lambertian distribution: only rays from 270° to 90° azimuth, max at 0°
-void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxElevationDeg) {
+void traceLed(const Fiber &fiber, int numRays, double maxAngleDeg) {
     if (numRays < 20) numRays = 20;
-
-    // Limit azimuth to [-90°, +90°], i.e., [-π/2, +π/2] radians
-    double minAzimuthRad = -M_PI / 2;
-    double maxAzimuthRad = M_PI / 2;
+    // Azimuth: [360-maxAngleDeg, 360°) U [0°, maxAngleDeg)
+    double minAzimuthDeg1 = 360.0 - maxAngleDeg;
+    double maxAzimuthDeg1 = 360.0;
+    double minAzimuthDeg2 = 0.0;
+    double maxAzimuthDeg2 = maxAngleDeg;
+    double maxElevationDeg = maxAngleDeg;
     double maxElevationRad = maxElevationDeg * M_PI / 180.0;
 
     std::random_device rd;
@@ -35,16 +37,29 @@ void traceLed(const Fiber &fiber, int numRays, double maxAzimuthDeg, double maxE
     std::uniform_real_distribution<> uniform(0.0, 1.0);
 
     int rayCount = 0;
+    int rayID = 0;
     while (rayCount < numRays) {
-        // Sample phi uniformly in [-π/2, +π/2]
-        double phi = minAzimuthRad + uniform(gen) * (maxAzimuthRad - minAzimuthRad);
+        // Sample azimuth in [270°, 360°) U [0°, 90°)
+        double u = uniform(gen);
+        double phiDeg;
+        if (u < 0.5) {
+            phiDeg = minAzimuthDeg1 + (maxAzimuthDeg1 - minAzimuthDeg1) * (u / 0.5);
+        } else {
+            phiDeg = minAzimuthDeg2 + (maxAzimuthDeg2 - minAzimuthDeg2) * ((u - 0.5) / 0.5);
+        }
+        double phi = phiDeg * M_PI / 180.0;
 
         // Cosine-weighted elevation (Lambertian)
         double cosThetaMin = std::cos(maxElevationRad);
         double cosTheta = uniform(gen) * (1.0 - cosThetaMin) + cosThetaMin;
         double theta = std::acos(cosTheta);
 
-        traceSingleRayNoID(fiber, phi, theta);
+        // Randomly flip to negative y hemisphere
+        if (uniform(gen) < 0.5) {
+            theta = -theta;
+        }
+
+        traceSingleRay(fiber, phi, theta);
         ++rayCount;
     }
 }
@@ -62,14 +77,13 @@ int main(){
     printf("fiber_top_z,%f\nfiber_bottom_z,%f\n", fiber.getTopZ(), fiber.getBottomZ());
     printf("x,y,z\n");
 
-    int aantalRays = 1000000;
-    double maxAzimuth = 70;   // in degrees
-    double maxElevation = 70; // in degrees
-    //traceMultipleRaysRandom(fiber, aantalRays, maxAzimuth, maxElevation);
-    //traceMultipleRaysSegmented(fiber, aantalRays, maxAzimuth, maxElevation);
+    int numberOfRays = 100000;
+    double maxAngle = 90.0; // Max angle in degrees
 
     auto start = std::chrono::steady_clock::now();
-    traceLed(fiber, aantalRays, maxAzimuth, maxElevation);
+
+    traceLed(fiber, numberOfRays, maxAngle);
+
     auto end = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << elapsed << " ms\n";
