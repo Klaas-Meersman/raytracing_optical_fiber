@@ -78,7 +78,7 @@ int main(){
     printf("x,y,z\n");
 
     int numberOfRays = 1000000;
-    double maxAngle = 70; // Max angle in degrees
+    double maxAngle = 85; // Max angle in degrees
 
     auto start = std::chrono::steady_clock::now();
 
