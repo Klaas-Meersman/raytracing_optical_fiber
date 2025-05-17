@@ -28,7 +28,7 @@ __global__ void initCurandStates(curandState *states, int numRays, unsigned long
     }
 }
 
-__global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState* states) {
+/* __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState* states) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= numRays) return;
 
@@ -69,7 +69,7 @@ __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber, curandState
 }
 
 
-void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
+void runTraceRayGPU(Fiber* fiber,int numRays)
 {
     int blockSize = 128;
     int numBlocks = (numRays + blockSize - 1) / blockSize;
@@ -99,21 +99,121 @@ void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
     cudaFree(GPU_rays);
     cudaFree(GPU_fiber);
     cudaFree(d_states); // <--- free cuRAND states
-
-    if(printDensity){
-        for (int i = 0; i < numRays; ++i) {
-            //std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
-            //printf version
-            printf("%f, %f, %f\n", ray_array[i].getEnd().x, ray_array[i].getEnd().y, ray_array[i].getEnd().z);
-        }
+    
+    for (int i = 0; i < numRays; ++i) {
+        //std::cout << ray_array[i].getEnd().x << ", " << ray_array[i].getEnd().y << ", " << ray_array[i].getEnd().z  <<  std::endl;
+        //printf version
+        printf("%f, %f, %f\n", ray_array[i].getEnd().x, ray_array[i].getEnd().y, ray_array[i].getEnd().z);
     }
     delete[] ray_array;
+} */
+
+__global__ void initRaysBinned(Ray* rays, int numRays, const Fiber* fiber, curandState* states, double binMin, double binMax, double maxAngleDeg) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= numRays) return;
+
+    curandState localState = states[idx];
+
+    // Azimuth: [360-maxAngleDeg, 360°) U [0°, maxAngleDeg)
+    double minAzimuthDeg1 = 360.0 - maxAngleDeg;
+    double maxAzimuthDeg1 = 360.0;
+    double minAzimuthDeg2 = 0.0;
+    double maxAzimuthDeg2 = maxAngleDeg;
+
+    double u = curand_uniform_double(&localState);
+    double phiDeg;
+    if (u < 0.5) {
+        phiDeg = minAzimuthDeg1 + (maxAzimuthDeg1 - minAzimuthDeg1) * (u / 0.5);
+    } else {
+        phiDeg = minAzimuthDeg2 + (maxAzimuthDeg2 - minAzimuthDeg2) * ((u - 0.5) / 0.5);
+    }
+    double phi = phiDeg * M_PI / 180.0;
+
+    // Elevation: sample uniformly within this bin's range
+    double v = curand_uniform_double(&localState);
+    double elevationDeg = binMin + (binMax - binMin) * v;
+    double maxElevationRad = maxAngleDeg * M_PI / 180.0;
+    double elevationRad = elevationDeg * M_PI / 180.0;
+
+    // Lambertian: cosine-weighted elevation within bin
+    double cosThetaMin = cos(binMax * M_PI / 180.0);
+    double cosThetaMax = cos(binMin * M_PI / 180.0);
+    double w = curand_uniform_double(&localState);
+    double cosTheta = w * (cosThetaMax - cosThetaMin) + cosThetaMin;
+    double theta = acos(cosTheta);
+
+    // Randomly flip to negative y hemisphere
+    double flip = curand_uniform_double(&localState);
+    if (flip < 0.5) {
+        theta = -theta;
+    }
+
+    rays[idx] = Ray(Coordinate(0, 0, 0), phi, theta, fiber);
+
+    states[idx] = localState;
 }
 
 
+Ray* runTraceRayGPU(Fiber* fiber, int numRays)
+{
+    int blockSize = 256;
+    int numBins = 16; // Number of angle bins (tune as needed)
+    double maxAngleDeg = 85.0;
+
+    // Allocate device fiber ONCE
+    Fiber* GPU_fiber;
+    cudaMalloc((void**)&GPU_fiber, sizeof(Fiber));
+    cudaMemcpy(GPU_fiber, fiber, sizeof(Fiber), cudaMemcpyHostToDevice);
+
+    // Prepare host-side arrays for results
+    Ray* ray_array = new Ray[numRays];
+    int raysPerBin = numRays / numBins;
+    int rayOffset = 0;
+
+    for (int bin = 0; bin < numBins; ++bin) {
+        int raysInThisBin = (bin == numBins - 1) ? (numRays - rayOffset) : raysPerBin;
+
+        // Allocate device memory for rays and cuRAND states for this bin
+        Ray* GPU_rays;
+        cudaMalloc(&GPU_rays, raysInThisBin * sizeof(Ray));
+        curandState* d_states;
+        cudaMalloc(&d_states, raysInThisBin * sizeof(curandState));
+
+        // Initialize cuRAND states
+        unsigned long seed = static_cast<unsigned long>(time(NULL)) + bin;
+        int numBlocks = (raysInThisBin + blockSize - 1) / blockSize;
+        initCurandStates<<<numBlocks, blockSize>>>(d_states, raysInThisBin, seed);
+        cudaDeviceSynchronize();
+
+        // Calculate elevation angle range for this bin
+        double binMin = -maxAngleDeg + (2.0 * maxAngleDeg) * bin / numBins;
+        double binMax = -maxAngleDeg + (2.0 * maxAngleDeg) * (bin + 1) / numBins;
+
+        // Kernel to initialize rays in this bin with elevation angles in [binMin, binMax]
+        initRaysBinned<<<numBlocks, blockSize>>>(GPU_rays, raysInThisBin, GPU_fiber, d_states, binMin, binMax, maxAngleDeg);
+        cudaDeviceSynchronize();
+
+        // Trace rays in this bin
+        traceRayGPU<<<numBlocks, blockSize>>>(GPU_fiber, GPU_rays, raysInThisBin);
+        cudaDeviceSynchronize();
+
+        // Copy results back to correct offset in host array
+        cudaMemcpy(ray_array + rayOffset, GPU_rays, raysInThisBin * sizeof(Ray), cudaMemcpyDeviceToHost);
+
+        // Free device memory for this bin
+        cudaFree(GPU_rays);
+        cudaFree(d_states);
+
+        rayOffset += raysInThisBin;
+    }
+
+    cudaFree(GPU_fiber);
+
+    return ray_array;
+}
+
 int main(){
     //Density simulation
-    bool printDensity = true;
     double length_fiber = 100;
     double width_fiber = 5;
     double height_fiber = 5;
@@ -127,10 +227,15 @@ int main(){
 
     auto start = std::chrono::steady_clock::now();
 
-    runTraceRayGPU(&fiber, numRays,printDensity);
+    Ray* ray_array = runTraceRayGPU(&fiber, numRays);
 
     auto end = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << elapsed << "ms\n";
 
+    for (int i = 0; i < numRays; ++i) {
+        printf("%f, %f, %f\n", ray_array[i].getEnd().x, ray_array[i].getEnd().y, ray_array[i].getEnd().z);
+    }
+    printf("%lld ms\n", elapsed);
+
+    delete[] ray_array;
 }
