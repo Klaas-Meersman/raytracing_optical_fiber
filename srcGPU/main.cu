@@ -10,62 +10,58 @@
 
 __global__ void traceRayGPU(const Fiber* fiber, Ray *rays, int numRays)
 {
-    //const int maxbounces = 1000000;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx < numRays) {
-        //int bounce = 0;
-        while (!rays[idx].getEndHitFiber()) {//&& bounce < maxbounces) {
+        while (!rays[idx].getEndHitFiber()) {
             rays[idx] = rays[idx].propagateRay();
-            //bounce++;
-            /* if(maxbounces == bounce){
-                printf("Hit max bounces\n");
-            } */
+
         }
     }
 }
 
-/* __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < numRays) {
-        double u = static_cast<double>(idx) / numRays; // or pass in randoms
-        double theta = asin(u);
-        double angleRadians = (idx % 2 == 0) ? theta : 3 * M_PI / 2 + theta;
-        rays[idx] = Ray(Coordinate(0, 0, 0), angleRadians, angleRadians, fiber);
-        //printf("Angle: %f\n", angleRadians);
-    }
-} */
 
-__device__ double nonlinear_angle(int i, int steps, double maxDeg, double gamma) {
-    if (steps <= 1) return 0.0;
-    double t = (double)i / (steps - 1);      // 0 .. 1
-    double x = 2.0 * t - 1.0;                // -1 .. 1
-    double curved = x * pow(fabs(x), gamma); // nonlinear distribution
-    double angle = curved * maxDeg;          // -maxDeg .. maxDeg
-    return angle * (M_PI / 180.0);           // degrees to radians
+__device__ double rand_uniform(int idx, int salt = 0) {
+    // Simple LCG for per-thread reproducible pseudo-random numbers
+    unsigned int seed = 123456789u + idx * 65497u + salt * 9973u;
+    seed = (1103515245u * seed + 12345u) & 0x7fffffff;
+    return seed / double(0x7fffffff);
 }
 
 __global__ void initRays(Ray* rays, int numRays, const Fiber* fiber) {
-    double maxAzimuthDeg = 30;
-    double maxElevationDeg = 30;
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= numRays) return;
 
-    // Calculate grid dimensions as in your CPU code
-    int elevationSteps = (int)sqrt((double)numRays);
-    int azimuthSteps = (numRays + elevationSteps - 1) / elevationSteps;
-    double gamma = 3.0;
+    double maxAngleDeg = 70.0; // Only change this value!
+    double minAzimuthDeg1 = 360.0 - maxAngleDeg;
+    double maxAzimuthDeg1 = 360.0;
+    double minAzimuthDeg2 = 0.0;
+    double maxAzimuthDeg2 = maxAngleDeg;
+    double maxElevationDeg = maxAngleDeg;
+    double maxElevationRad = maxElevationDeg * M_PI / 180.0;
 
-    // Map idx to 2D grid
-    int elevationIdx = idx / azimuthSteps;
-    int azimuthIdx   = idx % azimuthSteps;
+    // Per-thread pseudo-random numbers
+    double u = rand_uniform(idx, 0);
+    double phiDeg;
+    if (u < 0.5) {
+        phiDeg = minAzimuthDeg1 + (maxAzimuthDeg1 - minAzimuthDeg1) * (u / 0.5);
+    } else {
+        phiDeg = minAzimuthDeg2 + (maxAzimuthDeg2 - minAzimuthDeg2) * ((u - 0.5) / 0.5);
+    }
+    double phi = phiDeg * M_PI / 180.0;
 
-    // Guard against overrun (last row may be incomplete)
-    if (elevationIdx >= elevationSteps) return;
+    // Cosine-weighted elevation (Lambertian)
+    double v = rand_uniform(idx, 1);
+    double cosThetaMin = cos(maxElevationRad);
+    double cosTheta = v * (1.0 - cosThetaMin) + cosThetaMin;
+    double theta = acos(cosTheta);
 
-    double azimuth   = nonlinear_angle(azimuthIdx, azimuthSteps,   maxAzimuthDeg,   gamma);
-    double elevation = nonlinear_angle(elevationIdx, elevationSteps, maxElevationDeg, gamma);
+    // Randomly flip to negative y hemisphere
+    double w = rand_uniform(idx, 2);
+    if (w < 0.5) {
+        theta = -theta;
+    }
 
-    rays[idx] = Ray(Coordinate(0, 0, 0), azimuth, elevation, fiber);
+    rays[idx] = Ray(Coordinate(0, 0, 0), phi, theta, fiber);
 }
 
 
@@ -87,8 +83,6 @@ void runTraceRayGPU(Fiber* fiber,int numRays,bool printDensity)
     cudaDeviceSynchronize();
     
     // Allocate GPU memory for Fiber
-
-
 
     traceRayGPU<<<numBlocks, blockSize>>>(GPU_fiber, GPU_rays, numRays);
     cudaDeviceSynchronize();
